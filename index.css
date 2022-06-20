@@ -1,0 +1,23 @@
+#h1{
+    scale: 2;
+}
+#alias{
+    position: relative;
+    top: 80px;
+    scale: 1.5;
+}
+#pass{
+    position: relative;
+    top: 80px;
+    scale: 1.5;
+}
+#in{
+    position: relative;
+    top: 85px;
+    scale: 1.5;
+}
+#up{
+    position: relative;
+    top: 85px;
+    scale: 1.5;
+}
