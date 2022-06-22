@@ -21,3 +21,13 @@
     top: 85px;
     scale: 1.5;
 }
+#say{
+    position: relative;
+    top: 90px;
+    scale:1.25;
+}
+#speak{
+    position: relative;
+    top: 92px;
+    scale:1.25;
+}
