@@ -1,9 +1,5 @@
-
-src="https://cdn.jsdelivr.net/npm/gun/examples/jquery.js"
-src="https://cdn.jsdelivr.net/npm/gun/gun.js"
-src="https://cdn.jsdelivr.net/npm/gun/sea.js"
-src="https://cdn.jsdelivr.net/npm/gun/lib/webrtc.js"
-
+  
+  
     var gun = Gun(['http://localhost:8765/gun', 'https://gun-manhattan.herokuapp.com/gun']);
     var user = gun.user();
 
