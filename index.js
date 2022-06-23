@@ -3,6 +3,8 @@
     var gun = Gun(['http://localhost:8765/gun', 'https://gun-manhattan.herokuapp.com/gun']);
     var user = gun.user();
 
+    $('#said').hide();
+
     $('#up').on('click', function(e){
       user.create($('#alias').val(), $('#pass').val());
     });
@@ -14,7 +16,7 @@
 
     $('#said').on('submit', function(e){
       e.preventDefault();
-      if(!user.is){ return }
+      if(!user.is){return}
       user.get('said').set($('#say').val());
       $('#say').val("");
     });
@@ -26,5 +28,6 @@
 
     gun.on('auth', function(){
       $('#sign').hide();
+      $('#said').show();
       user.get('said').map().once(UI);
     });

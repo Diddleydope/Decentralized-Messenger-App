@@ -31,3 +31,14 @@
     top: 90px;
     scale:1.5;
 }
+#chatbox{
+    display: flex;
+    border:1px solid black;
+    align-content:flex-start;
+    margin:auto;
+    width: 600px;
+}
+#sendbox{
+    margin: auto;
+    text-align: center;
+}
