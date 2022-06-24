@@ -3,22 +3,22 @@
 }
 #alias{
     position: relative;
-    top: 80px;
+    top: 15vh;
     scale: 1.5;
 }
 #pass{
     position: relative;
-    top: 80px;
+    top: 15vh;
     scale: 1.5;
 }
 #in{
     position: relative;
-    top: 85px;
+    top: 20vh;
     scale: 1.5;
 }
 #up{
     position: relative;
-    top: 85px;
+    top: 20vh;
     scale: 1.5;
 }
 #say{
