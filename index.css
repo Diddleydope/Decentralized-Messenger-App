@@ -23,12 +23,12 @@
 }
 #say{
     position: relative;
-    top: 20px;
+    top: 5vh;
     scale:1.5;
 }
 #speak{
     position: relative;
-    top: 20px;
+    top: 5vh;
     scale:1.5;
 }
 #chatbox{
@@ -37,8 +37,8 @@
     border-style: inset;
     align-content:flex-start;
     margin:auto;
-    width: 600px;
-    height: 400px;
+    width: 150vh;
+    height: 72vh;
     overflow: scroll;
     background-color: #65B8BF;
 }
