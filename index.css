@@ -46,7 +46,7 @@
 #said{
     position: relative;
 }
-@media screen and (max-width: 1500px){
+@media all and (max-width: 1500px){
     #chatbox{
         display: flex;
         border:1vh solid black;
