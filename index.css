@@ -1,3 +1,4 @@
+
 #h1{
     scale: 2;
 }
@@ -44,4 +45,17 @@
 }
 #said{
     position: relative;
+}
+@media screen and (max-width: 1500px){
+    #chatbox{
+        display: flex;
+        border:1vh solid black;
+        border-style: inset;
+        align-content:flex-start;
+        margin:auto;
+        width: 50vh;
+        height: 150vh;
+        overflow: scroll;
+        background-color: #65B8BF;
+    }
 }
