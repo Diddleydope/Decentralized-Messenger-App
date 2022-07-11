@@ -39,9 +39,9 @@
     align-content:flex-start;
     margin:auto;
     width: 90vw;
-    width: clamp(20vw,70vw,90vw);
+    width: clamp(10vw,70vw,100vw);
     height: 70vh;
-    height: clamp(20vh,70vh,90vh);
+    height: clamp(20vh,70vh,80vh);
     overflow: scroll;
     background-color: #65B8BF;
 }
