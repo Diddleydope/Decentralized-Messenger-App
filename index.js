@@ -16,7 +16,7 @@ $('#sign').on('submit', function(e){
 //form submission
 $('#said').on('submit', function(e){
   e.preventDefault();
-  //if(!user.is){return}
+  if(!user.is){return}
   user.get('said').set($('#say').val());
   $('#say').val("");
 });
