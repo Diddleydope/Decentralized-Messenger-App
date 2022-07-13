@@ -1,4 +1,4 @@
-var gun = Gun(['http://localhost:8765/gun', 'https://gun-manhattan.herokuapp.com/gun']);
+var gun = Gun();
 var user = gun.user();
 
 $('#said').hide();
