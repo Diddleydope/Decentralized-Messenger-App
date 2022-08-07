@@ -1,35 +1,42 @@
 var gun = Gun();
 var user = gun.user();
+//smth else??
 
-$('#said').hide();
+document.getElementById("said").hidden=true;
 
-//user registration and login
-$('#up').on('click', function(e){
-  user.create($('#alias').val(), $('#pass').val());
+document.querySelector('#up').addEventListener('click', (e) => {
+  user.create(document.querySelector('#alias').value,
+               document.querySelector('#pass').value);
 });
 
-$('#sign').on('submit', function(e){
+document.querySelector('#sign').addEventListener('click', (e) => {
   e.preventDefault();
-  user.auth($('#alias').val(), $('#pass').val());
+  user.auth(document.querySelector('#alias').value,
+               document.querySelector('#pass').value);
 });
 
 //form submission
-$('#said').on('submit', function(e){
+document.querySelector('#said').addEventListener('submit', (e) => {
   e.preventDefault();
   if(!user.is){return}
-  user.get('said').set($('#say').val());
-  $('#say').val("");
+  user.get('said').set(document.querySelector('#say').value); //List? append?
+  document.querySelector('#say').value = ("");
 });
 
 //display on the UI
 function UI(say, id){
-  var li = $('#' + id).get(0) || $('<li>').attr('id', id).appendTo('ul');
-  var username = $('#alias').val();
-  $(li).text(username + ": " + say);
+  var li = document.querySelector('#' + id);
+  if(li == undefined) {
+    var li = document.createElement('li');
+    li.setAttribute('id', id);
+    document.querySelector('ul').appendChild(li);
+    }
+  var username = user.get('alias');
+  (li).textContent = `${username}: ${say}`; //String interpolation
 };
 
 gun.on('auth', function(){
-  $('#sign').hide();
-  $('#said').show();
+  document.getElementById("sign").hidden=true;  
+  document.getElementById("said").hidden=false;
   user.get('said').map().once(UI);
 });
