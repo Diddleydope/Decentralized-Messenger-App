@@ -2,7 +2,7 @@ var gun = Gun();
 var user = gun.user();
 //smth else??
 
-document.getElementById("said").hidden=true;
+document.getElementById("messages").hidden=true;
 
 document.querySelector('#up').addEventListener('click', (e) => {
   user.create(document.querySelector('#alias').value,
@@ -16,10 +16,10 @@ document.querySelector('#sign').addEventListener('click', (e) => {
 });
 
 //form submission
-document.querySelector('#said').addEventListener('submit', (e) => {
+document.querySelector('#messages').addEventListener('submit', (e) => {
   e.preventDefault();
   if(!user.is){return}
-  user.get('said').set(document.querySelector('#say').value); //List? append?
+  gun.get('messages').set(document.querySelector('#say').value); //List? append?
   document.querySelector('#say').value = ("");
 });
 
@@ -37,6 +37,6 @@ function UI(say, id){
 
 gun.on('auth', function(){
   document.getElementById("sign").hidden=true;  
-  document.getElementById("said").hidden=false;
-  user.get('said').map().once(UI);
+  document.getElementById("messages").hidden=false;
+  gun.get('messages').map().once(UI);
 });
