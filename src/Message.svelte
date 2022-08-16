@@ -10,3 +10,9 @@
     messageType = "received";
   }
 </script>
+
+<div class="message ${messageType}">
+  <div class="message-text">
+    <ul />
+  </div>
+</div>

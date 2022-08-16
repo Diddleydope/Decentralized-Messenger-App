@@ -1,42 +1,64 @@
 <script>
-  /*document.getElementById("messages").hidden = true;
+  import Login from "./Login.svelte";
+  import Message from "./Message.svelte";
+  import { onMount } from "svelte";
+  import { username, user, gun } from "./user";
+  import { dataset_dev } from "svelte/internal";
 
-  //form submission
-  document.querySelector("#messages").addEventListener("submit", (e) => {
-    e.preventDefault();
-    if (!user.is) {
-      return;
-    }
-    gun.get("messages").set(document.querySelector("#say").value); //List? append?
-    document.querySelector("#say").value = "";
-  });
-  //display on the UI
-  function UI(say, id) {
-    var li = document.querySelector("#" + id);
-    if (li == undefined) {
-      var li = document.createElement("li");
-      li.setAttribute("id", id);
-      document.querySelector("ul").appendChild(li);
-    }
-    var username = user.get("alias");
-    li.textContent = `${username}: ${say}`; //String interpolation
-  }*/
+  let newMessage;
+  let Messages = [];
+
+  onMount(() =>
+    //get Messages
+    gun
+      .get("chat")
+      .map(match)
+      .once(async (data, id) => {
+        if (data) {
+          let message = {
+            who: await gun.user(data).get("alias"),
+            what: await data.what,
+          };
+
+          if (message.what) {
+            messages = [...messages.slice(-100), message].sort(
+              (a, b) => a.when - b.when
+            );
+          }
+        }
+      })
+  );
+
+  async function sendMessage() {
+    const message = user.get("all").set({ what: newMessage });
+    gun.get("chat").get(index).put(message); //Hm.
+    newMessage = "";
+  }
 </script>
 
-<form id="messages">
-  <div id="chatbox">
-    <ul />
-  </div>
-  <div id="coms">
-    <center>
-      <input id="say" />
-      <input id="speak" type="submit" value="send" />
-    </center>
-  </div>
+<form id="messages-container">
+  {#if $username}
+    <div id="chatbox">
+      {#each Messages as message}
+        <Message {message} sender={$username} />
+      {/each}
+      <ul />
+    </div>
+    <div id="coms">
+      <center>
+        <input
+          type="text"
+          placeholder="Type a message..."
+          bind:value={newMessage}
+        />
+        <button type="submit" disabled={!newMessage}>✦</button>
+      </center>
+    </div>
+  {/if}
 </form>
 
 <style>
-  #messages {
+  #messages-container {
     position: relative;
   }
   #coms {

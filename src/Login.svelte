@@ -1,5 +1,5 @@
 <script>
-  import { user } from "./user";
+  import { gun, user } from "./user";
 
   let username, password;
 
@@ -17,21 +17,6 @@
       console.log("username or password incorrect")
     );
   }
-
-  /*document.querySelector("#up").addEventListener("click", (e) => {
-    user.create(
-      document.querySelector("#alias").value,
-      document.querySelector("#pass").value
-    );
-  });
-
-  document.querySelector("#sign").addEventListener("click", (e) => {
-    e.preventDefault();
-    user.auth(
-      document.querySelector("#alias").value,
-      document.querySelector("#pass").value
-    );
-  });*/
 </script>
 
 <form id="sign">

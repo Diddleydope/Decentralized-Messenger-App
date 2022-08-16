@@ -2,18 +2,11 @@
   import Login from "./Login.svelte";
   import Chat from "./Chat.svelte";
   import UI from "./UI.svelte";
-  /*
-  gun.on("auth", function () {
-    document.getElementById("sign").hidden = true;
-    document.getElementById("messages").hidden = false;
-    gun.get("messages").map().once(UI);
-  });*/
 </script>
 
 <main>
   <UI />
-  <Login />
-  <!--<Chat />-->
+  <Chat />
 </main>
 
 <style>
