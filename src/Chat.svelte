@@ -35,41 +35,36 @@
   }
 </script>
 
-<form id="messages-container">
-  {#if $username}
-    <div id="chatbox">
-      {#each Messages as message}
-        <Message {message} sender={$username} />
-      {/each}
-      <ul />
-    </div>
-    <div id="coms">
-      <center>
-        <input
-          type="text"
-          placeholder="Type a message..."
-          bind:value={newMessage}
-          id="say"
-        />
-        <button
-          on:submit|preventDefault={sendMessage}
-          id="speak"
-          type="submit"
-          disabled={!newMessage}>✦</button
-        >
-      </center>
-    </div>
-  {:else}
-    <main>
-      <Login />
-    </main>
-  {/if}
-</form>
+{#if $username}
+  <div id="chatbox">
+    {#each Messages as message}
+      <Message {message} sender={$username} />
+    {/each}
+    <ul />
+  </div>
+  <div id="coms">
+    <center>
+      <input
+        type="text"
+        placeholder="Type a message..."
+        bind:value={newMessage}
+        id="say"
+      />
+      <button
+        on:submit|preventDefault={sendMessage}
+        id="speak"
+        type="submit"
+        disabled={!newMessage}>✦</button
+      >
+    </center>
+  </div>
+{:else}
+  <main>
+    <Login />
+  </main>
+{/if}
 
 <style>
-  #messages-container {
-    position: relative;
-  }
   #coms {
     position: relative;
   }

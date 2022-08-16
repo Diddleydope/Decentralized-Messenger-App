@@ -1,11 +1,17 @@
-<script></script>
+<script>
+  import App from "./App.svelte";
+</script>
 
 <main>
-  <center><h1 id="h1">Dappr</h1></center>
+  <h1 id="h1"><i>ᴅᴀᴘᴘʀ</i></h1>
 </main>
 
 <style>
   #h1 {
-    scale: 2;
+    scale: 2.5;
+    color: #dbcece;
+  }
+  :global(body) {
+    background-color: #f5f0f0;
   }
 </style>

@@ -19,50 +19,47 @@
   }
 </script>
 
-<form id="sign">
-  <center>
-    <input
-      type="text"
-      id="alias"
-      placeholder="username"
-      bind:value={username}
-    />
-    <p />
-    <input
-      type="password"
-      id="pass"
-      placeholder="password"
-      bind:value={password}
-    />
-    <p />
-    <!--<input type="submit" id="in" value="sign in" />-->
-    <!--<input type="button" id="up" value="sign up" />-->
-    <button on:click={login} id="in">Login</button>
-    <button on:click={signup} id="up">Sign up</button>
-  </center>
-</form>
+<center>
+  <input type="text" id="alias" placeholder="username" bind:value={username} />
+  <p />
+  <input
+    type="password"
+    id="pass"
+    placeholder="password"
+    bind:value={password}
+  />
+  <p />
+  <!--<input type="submit" id="in" value="sign in" />-->
+  <!--<input type="button" id="up" value="sign up" />-->
+  <button on:click={login} id="in">Login</button>
+  <button on:click={signup} id="up">Sign up</button>
+</center>
 
 <style>
   #alias {
     position: relative;
     top: 15vh;
     scale: 1.5;
+    background-color: #eee6e6;
   }
   #pass {
     position: relative;
     top: 15vh;
     scale: 1.5;
+    background-color: #eee6e6;
   }
   #in {
     position: relative;
     top: 20vh;
     scale: 1.5;
     margin-right: 2vw;
+    background-color: #eee6e6;
   }
   #up {
     position: relative;
     top: 20vh;
     scale: 1.5;
     margin-left: 2vw;
+    background-color: #eee6e6;
   }
 </style>
