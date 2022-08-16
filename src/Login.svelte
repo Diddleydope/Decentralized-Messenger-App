@@ -1,4 +1,23 @@
 <script>
+  import { user } from "./user";
+
+  let username, password;
+
+  function login() {
+    user.auth(
+      username,
+      password,
+      console.log("username or password incorrect")
+    );
+  }
+  function signup() {
+    user.create(
+      username,
+      password,
+      console.log("username or password incorrect")
+    );
+  }
+
   /*document.querySelector("#up").addEventListener("click", (e) => {
     user.create(
       document.querySelector("#alias").value,
@@ -21,8 +40,10 @@
     <p />
     <input type="password" id="pass" placeholder="password" />
     <p />
-    <input type="submit" id="in" value="sign in" />
-    <input type="button" id="up" value="sign up" />
+    <!--<input type="submit" id="in" value="sign in" />-->
+    <!--<input type="button" id="up" value="sign up" />-->
+    <button on:click={login} id="in">Login</button>
+    <button on:click={signup} id="up">Sign up</button>
   </center>
 </form>
 
