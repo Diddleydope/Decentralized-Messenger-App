@@ -1,5 +1,5 @@
 <script>
-  import { gun, user } from "./user";
+  import { user } from "./user";
 
   let username, password;
 
@@ -21,9 +21,19 @@
 
 <form id="sign">
   <center>
-    <input type="text" id="alias" placeholder="username" />
+    <input
+      type="text"
+      id="alias"
+      placeholder="username"
+      bind:value={username}
+    />
     <p />
-    <input type="password" id="pass" placeholder="password" />
+    <input
+      type="password"
+      id="pass"
+      placeholder="password"
+      bind:value={password}
+    />
     <p />
     <!--<input type="submit" id="in" value="sign in" />-->
     <!--<input type="button" id="up" value="sign up" />-->

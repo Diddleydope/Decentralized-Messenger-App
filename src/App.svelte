@@ -1,5 +1,4 @@
 <script>
-  import Login from "./Login.svelte";
   import Chat from "./Chat.svelte";
   import UI from "./UI.svelte";
 </script>

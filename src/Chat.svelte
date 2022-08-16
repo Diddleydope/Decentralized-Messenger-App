@@ -3,7 +3,6 @@
   import Message from "./Message.svelte";
   import { onMount } from "svelte";
   import { username, user, gun } from "./user";
-  import { dataset_dev } from "svelte/internal";
 
   let newMessage;
   let Messages = [];
@@ -12,17 +11,17 @@
     //get Messages
     gun
       .get("chat")
-      .map(match)
+      .map()
       .once(async (data, id) => {
         if (data) {
           let message = {
-            who: await gun.user(data).get("alias"),
+            who: gun.user(data).get("alias"),
             what: await data.what,
           };
 
           if (message.what) {
             messages = [...messages.slice(-100), message].sort(
-              (a, b) => a.when - b.when
+              (a, b) => a.when - b.when //This, idk what this does
             );
           }
         }
@@ -50,10 +49,20 @@
           type="text"
           placeholder="Type a message..."
           bind:value={newMessage}
+          id="say"
         />
-        <button type="submit" disabled={!newMessage}>✦</button>
+        <button
+          on:submit|preventDefault={sendMessage}
+          id="speak"
+          type="submit"
+          disabled={!newMessage}>✦</button
+        >
       </center>
     </div>
+  {:else}
+    <main>
+      <Login />
+    </main>
   {/if}
 </form>
 

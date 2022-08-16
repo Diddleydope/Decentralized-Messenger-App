@@ -12,6 +12,8 @@ export const user = gun.user().recall({sessionStorage: true});
 // Current User's username
 export const username = writable('');
 
+user.get('alias').on(v => username.set(v));
+
 //sets username to alias value
 gun.on('auth', async(event) => {
     const alias = await user.get('alias');

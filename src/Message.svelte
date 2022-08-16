@@ -13,6 +13,6 @@
 
 <div class="message ${messageType}">
   <div class="message-text">
-    <ul />
+    <p>{message.what}</p>
   </div>
 </div>
