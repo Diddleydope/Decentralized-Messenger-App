@@ -11,8 +11,7 @@
   }
 </script>
 
-<div class="message ${messageType}">
-  <div class="message-text">
-    <p>{message.what}</p>
-  </div>
+<div class="message-text">
+  <!--MISSING DIV-->
+  <p>{message.what}</p>
 </div>

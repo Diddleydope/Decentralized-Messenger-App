@@ -9,7 +9,7 @@
 <style>
   #h1 {
     scale: 2.5;
-    color: #dbcece;
+    color: #c7b7b7;
   }
   :global(body) {
     background-color: #f5f0f0;

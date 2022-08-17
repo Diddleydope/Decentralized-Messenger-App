@@ -7,30 +7,32 @@
   let newMessage;
   let Messages = [];
 
-  onMount(() =>
-    //get Messages
+  onMount(() => {
     gun
       .get("chat")
       .map()
       .once(async (data, id) => {
         if (data) {
-          let message = {
-            who: gun.user(data).get("alias"),
-            what: await data.what,
+          // Key for end-to-end encryptio
+
+          var message = {
+            // transform the data
+            who: await gun.user(data).get("alias"), // a user might lie who they are! So let the user system detect whose data it is.
+            what: data.what, // force decrypt as text.
           };
 
           if (message.what) {
             messages = [...messages.slice(-100), message].sort(
-              (a, b) => a.when - b.when //This, idk what this does
+              (a, b) => a.when - b.when
             );
           }
         }
-      })
-  );
+      });
+  });
 
   async function sendMessage() {
     const message = user.get("all").set({ what: newMessage });
-    gun.get("chat").get(index).put(message); //Hm.
+    gun.get("chat").put(message); //Hm.
     newMessage = "";
   }
 </script>
@@ -92,6 +94,6 @@
     height: 70vh;
     height: clamp(20vh, 70vh, 80vh);
     overflow: scroll;
-    background-color: #65b8bf;
+    background-color: #dbcece;
   }
 </style>

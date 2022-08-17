@@ -40,13 +40,13 @@
     position: relative;
     top: 15vh;
     scale: 1.5;
-    background-color: #eee6e6;
+    background-color: #e0e0e0;
   }
   #pass {
     position: relative;
     top: 15vh;
     scale: 1.5;
-    background-color: #eee6e6;
+    background-color: #e0e0e0;
   }
   #in {
     position: relative;
