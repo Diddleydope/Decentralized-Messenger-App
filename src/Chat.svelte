@@ -5,24 +5,24 @@
   import { username, user } from "./user";
 
   import GUN from "gun";
-  const gun = GUN();
+  const db = GUN();
 
   let newMessage;
   let messages = [];
 
   onMount(() => {
     // Get Messages
-    gun
-      .get("chat")
+    db.get("chat")
       .map()
-      .once(async (data, id) => {
+      .on(async (data, id) => {
+        //async (data, id)
         if (data) {
           // Key for end-to-end encryption
           const key = "#foo";
 
           var message = {
             // transform the data
-            who: await gun.user(data).get("alias"), //verifying user
+            who: await db.user(data).get("alias"), // a user might lie who they are! So let the user system detect whose data it is.
             what: (await SEA.decrypt(data.what, key)) + "", // force decrypt as text.
           };
 
@@ -39,7 +39,7 @@
     const secret = await SEA.encrypt(newMessage, "#foo");
     const message = user.get("all").set({ what: secret });
     const index = new Date().toISOString();
-    gun.get("chat").get(index).put(message);
+    db.get("chat").get(index).put(message);
     newMessage = "";
   }
 </script>
@@ -51,6 +51,7 @@
         <ChatMessage {message} sender={$username} />
       {/each}
     </main>
+
     <form on:submit|preventDefault={sendMessage}>
       <input
         type="text"
