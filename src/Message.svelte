@@ -1,17 +1,12 @@
 <script>
-  export let messenger;
   export let message;
+  export let sender;
 
-  let messageType;
-
-  if (message.who === messenger) {
-    messageType = "sent";
-  } else {
-    messageType = "received";
-  }
+  const messageClass = message.who === sender ? "sent" : "received";
 </script>
 
-<div class="message-text">
-  <!--MISSING DIV-->
-  <p>{message.what}</p>
+<div class={`message ${messageClass}`}>
+  <div class="message-text">
+    <p>{message.what}</p>
+  </div>
 </div>

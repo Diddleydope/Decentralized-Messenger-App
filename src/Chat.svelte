@@ -1,24 +1,29 @@
 <script>
   import Login from "./Login.svelte";
-  import Message from "./Message.svelte";
+  import ChatMessage from "./Message.svelte";
   import { onMount } from "svelte";
-  import { username, user, gun } from "./user";
+  import { username, user } from "./user";
+
+  import GUN from "gun";
+  const gun = GUN();
 
   let newMessage;
-  let Messages = [];
+  let messages = [];
 
   onMount(() => {
+    // Get Messages
     gun
       .get("chat")
       .map()
       .once(async (data, id) => {
         if (data) {
-          // Key for end-to-end encryptio
+          // Key for end-to-end encryption
+          const key = "#foo";
 
           var message = {
             // transform the data
-            who: await gun.user(data).get("alias"), // a user might lie who they are! So let the user system detect whose data it is.
-            what: data.what, // force decrypt as text.
+            who: await gun.user(data).get("alias"), //verifying user
+            what: (await SEA.decrypt(data.what, key)) + "", // force decrypt as text.
           };
 
           if (message.what) {
@@ -31,69 +36,34 @@
   });
 
   async function sendMessage() {
-    const message = user.get("all").set({ what: newMessage });
-    gun.get("chat").put(message); //Hm.
+    const secret = await SEA.encrypt(newMessage, "#foo");
+    const message = user.get("all").set({ what: secret });
+    const index = new Date().toISOString();
+    gun.get("chat").get(index).put(message);
     newMessage = "";
   }
 </script>
 
-{#if $username}
-  <div id="chatbox">
-    {#each Messages as message}
-      <Message {message} sender={$username} />
-    {/each}
-    <ul />
-  </div>
-  <div id="coms">
-    <center>
+<div class="container">
+  {#if $username}
+    <main>
+      {#each messages as message}
+        <ChatMessage {message} sender={$username} />
+      {/each}
+    </main>
+    <form on:submit|preventDefault={sendMessage}>
       <input
         type="text"
         placeholder="Type a message..."
         bind:value={newMessage}
-        id="say"
+        maxlength="100"
       />
-      <button
-        on:submit|preventDefault={sendMessage}
-        id="speak"
-        type="submit"
-        disabled={!newMessage}>✦</button
-      >
-    </center>
-  </div>
-{:else}
-  <main>
-    <Login />
-  </main>
-{/if}
 
-<style>
-  #coms {
-    position: relative;
-  }
-  #say {
-    position: relative;
-    top: 2vh;
-    align-content: center;
-    scale: 1.5;
-  }
-  #speak {
-    position: relative;
-    top: 2vh;
-    margin-left: 6vw;
-    scale: 1.5;
-  }
-  /*how to make sth fix to sth else*/
-  #chatbox {
-    display: flex;
-    border: 1vh solid black;
-    border-style: inset;
-    align-content: flex-start;
-    margin: auto;
-    width: 90vw;
-    width: clamp(10vw, 70vw, 100vw);
-    height: 70vh;
-    height: clamp(20vh, 70vh, 80vh);
-    overflow: scroll;
-    background-color: #dbcece;
-  }
-</style>
+      <button type="submit" disabled={!newMessage}>💥</button>
+    </form>
+  {:else}
+    <main>
+      <Login />
+    </main>
+  {/if}
+</div>
