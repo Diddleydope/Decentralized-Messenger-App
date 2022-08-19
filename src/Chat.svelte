@@ -2,9 +2,10 @@
   import Login from "./Login.svelte";
   import ChatMessage from "./Message.svelte";
   import { onMount } from "svelte";
-  import { username, user } from "./user";
+  import { username, user, gun } from "./user";
 
   import GUN from "gun";
+  import { prevent_default } from "svelte/internal";
   const db = GUN();
 
   let newMessage;
@@ -12,18 +13,17 @@
 
   onMount(() => {
     // Get Messages
-    db.get("chat")
+    db.get("testingg")
       .map()
       .on(async (data, id) => {
-        //async (data, id)
         if (data) {
           // Key for end-to-end encryption
-          const key = "#foo";
+          const key = "#dummeyKey";
 
           var message = {
             // transform the data
             who: await db.user(data).get("alias"), // a user might lie who they are! So let the user system detect whose data it is.
-            what: (await SEA.decrypt(data.what, key)) + "", // force decrypt as text.
+            what: data.msg, // force decrypt as text.
           };
 
           if (message.what) {
@@ -36,10 +36,12 @@
   });
 
   async function sendMessage() {
-    const secret = await SEA.encrypt(newMessage, "#foo");
-    const message = user.get("all").set({ what: secret });
     const index = new Date().toISOString();
-    db.get("chat").get(index).put(message);
+    db.get("testingg").set({
+      sender: $username,
+      timestamp: index,
+      msg: newMessage,
+    });
     newMessage = "";
   }
 </script>
@@ -60,7 +62,7 @@
         maxlength="100"
       />
 
-      <button type="submit" disabled={!newMessage}>💥</button>
+      <button type="submit" disabled={!newMessage}>✉</button>
     </form>
   {:else}
     <main>

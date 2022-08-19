@@ -2,9 +2,9 @@
   import App from "./App.svelte";
 </script>
 
-<main>
+<div>
   <h1 id="h1"><i>ᴅᴀᴘᴘʀ</i></h1>
-</main>
+</div>
 
 <style>
   #h1 {

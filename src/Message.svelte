@@ -1,4 +1,5 @@
 <script>
+  import { username } from "./user";
   export let message;
   export let sender;
 
@@ -7,6 +8,6 @@
 
 <div class={`message ${messageClass}`}>
   <div class="message-text">
-    <p>{message.what}</p>
+    <p>{`${message.what}`}</p>
   </div>
 </div>

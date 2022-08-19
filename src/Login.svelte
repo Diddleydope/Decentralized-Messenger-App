@@ -11,11 +11,7 @@
     );
   }
   function signup() {
-    user.create(
-      username,
-      password,
-      console.log("username or password incorrect")
-    );
+    user.create(username, password, console.log("user already exists!"));
   }
 </script>
 

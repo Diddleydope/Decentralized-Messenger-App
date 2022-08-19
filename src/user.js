@@ -7,7 +7,7 @@ import { writable } from "svelte/store";
 export const gun = GUN();
 
 // Gun User
-export const user = gun.user(); //.recall({sessionStorage: true})
+export const user = gun.user().recall({sessionStorage: true}); //.recall({sessionStorage: true})
 
 // Current User's username
 export const username = writable('');
