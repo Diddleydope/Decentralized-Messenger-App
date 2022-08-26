@@ -4,7 +4,9 @@ import "gun/axe";
 import { writable } from "svelte/store";
 
 // Database
-export const gun = GUN();
+export const gun = GUN(
+    {peers: ["http://localhost:8765/gun"]
+});
 
 // Gun User
 export const user = gun.user().recall({sessionStorage: true}); //.recall({sessionStorage: true})

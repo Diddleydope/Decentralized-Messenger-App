@@ -4,26 +4,24 @@
   import { onMount } from "svelte";
   import { username, user, gun } from "./user";
 
-  import GUN from "gun";
   import { prevent_default } from "svelte/internal";
-  const db = GUN();
 
   let newMessage;
   let messages = [];
 
   onMount(() => {
     // Get Messages
-    db.get("testingg")
+    gun.get("chat")
       .map()
-      .on(async (data, id) => {
+      .once(async (data, id) => {
         if (data) {
           // Key for end-to-end encryption
           const key = "#dummeyKey";
 
           var message = {
             // transform the data
-            who: await db.user(data).get("alias"), // a user might lie who they are! So let the user system detect whose data it is.
-            what: data.msg, // force decrypt as text.
+            who: await gun.user(data).get("alias"), // a user might lie who they are! So let the user system detect whose data it is.
+            what: data.what, // force decrypt as text.
           };
 
           if (message.what) {
@@ -36,13 +34,13 @@
   });
 
   async function sendMessage() {
-    const index = new Date().toISOString();
-    db.get("testingg").set({
-      sender: $username,
-      timestamp: index,
-      msg: newMessage,
-    });
-    newMessage = "";
+      const index = new Date().toISOString();
+      gun.get("chat").set({
+          sender: $username,
+          what: newMessage,
+          timestamp: index
+      })
+      newMessage = "";
   }
 </script>
 
