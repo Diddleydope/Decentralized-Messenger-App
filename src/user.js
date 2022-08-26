@@ -4,8 +4,20 @@ import "gun/axe";
 import { writable } from "svelte/store";
 
 // Database
-export const gun = GUN(
-    {peers: ["http://localhost:8765/gun"]
+// Die Datenbank muss nur einmal für das ganze Projekt erzeugt werden. Weil sie
+// exportiert wird, muss sie später nicht neu initialisiert werden. Das ist
+// auch gut so, denn dann muss die config nicht immer angepasst werden.
+// *peers*: Aus der Dokumentation von Gun ist zu entnehmen das Gun eine nur
+// lokale Datenbank anlegt wenn keine *peers* angegeben werden. Möchte man also
+// die Daten verteilen, braucht es einen Relay server. Der wird in den Peers
+// angegeben.
+// TODO: Herausfinden ob auch ein webclient als relay dienen kann. Im Moment
+// sieht es nicht so aus. Wenn der Relayserver wegfällt, dann bricht auch die
+// Kommunikation unter den Peers zusammen. Das sollte eigentlich nicht so sein,
+// das kommt vlt in einer neueren Version wieder. Ansonsten einfach genügend
+// Relays zur Verfügung stellen.
+export const gun = GUN({
+    peers: ["http://localhost:8765/gun"]
 });
 
 // Gun User
