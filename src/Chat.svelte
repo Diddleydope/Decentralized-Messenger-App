@@ -20,7 +20,8 @@
 
           var message = {
             // transform the data
-            who: await gun.user(data).get("alias"), // a user might lie who they are! So let the user system detect whose data it is.
+            /* who: await gun.user(data).get("alias"), // a user might lie who they are! So let the user system detect whose data it is. */
+            who: data.sender,
             what: data.what, // force decrypt as text.
           };
 

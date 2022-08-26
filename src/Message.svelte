@@ -8,6 +8,6 @@
 
 <div class={`message ${messageClass}`}>
   <div class="message-text">
-    <p>{`${message.what}`}</p>
+    <p>{`${message.who}: ${message.what}`}</p>
   </div>
 </div>
