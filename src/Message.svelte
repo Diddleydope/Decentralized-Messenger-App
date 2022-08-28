@@ -1,5 +1,4 @@
 <script>
-  import { username } from "./user";
   export let message;
   export let sender;
 
