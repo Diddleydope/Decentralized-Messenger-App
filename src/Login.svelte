@@ -15,7 +15,7 @@
   }
 </script>
 
-<center>
+<center id="login">
   <input type="text" id="alias" placeholder="username" bind:value={username} />
   <p />
   <input
@@ -32,6 +32,12 @@
 </center>
 
 <style>
+  #login {
+    position: fixed;
+    scale: 0.8;
+    top: 25vh;
+    left: 3vw;
+  }
   #alias {
     position: relative;
     top: 15vh;
