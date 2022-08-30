@@ -42,26 +42,26 @@
     position: relative;
     top: 15vh;
     scale: 1.5;
-    background-color: #e0e0e0;
+    background-color: #eae7dc;
   }
   #pass {
     position: relative;
     top: 15vh;
     scale: 1.5;
-    background-color: #e0e0e0;
+    background-color: #eae7dc;
   }
   #in {
     position: relative;
     top: 20vh;
     scale: 1.5;
     margin-right: 2vw;
-    background-color: #eee6e6;
+    background-color: #eae7dc;
   }
   #up {
     position: relative;
     top: 20vh;
     scale: 1.5;
     margin-left: 2vw;
-    background-color: #eee6e6;
+    background-color: #eae7dc;
   }
 </style>

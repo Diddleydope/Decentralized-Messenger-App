@@ -37,32 +37,35 @@
   #h1 {
     position: fixed;
     scale: 1.5;
-    color: #c7b7b7;
+    color: #d8c3a5;
     left: 3vw;
     top: -3vh;
   }
   :global(body) {
-    background-color: #f5f0f0;
+    background-color: #eae7dc;
   }
   #login-indicator {
     scale: 1.5;
     position: fixed;
     top: 30vh;
-    left: 9vw;
+    left: 9.5vw;
+    color: #e85a4f;
   }
   #welcome {
     position: fixed;
-    font-family: "Rubik Maze", cursive;
-    scale: 10;
-    top: 20vh;
+    font-family: "Bebas Neue", cursive;
+    scale: 12;
+    top: 28vh;
     left: 45vw;
+    color: #e85a4f;
   }
   #to {
     position: fixed;
-    font-family: "Silkscreen", cursive;
+    font-family: "Bebas Neue", cursive;
     scale: 5;
-    left: 65vw;
-    top: 36vh;
+    left: 72vw;
+    top: 34vh;
+    color: #e98074;
   }
   #decentralized {
     position: fixed;
@@ -70,6 +73,7 @@
     scale: 7;
     left: 55vw;
     top: 53vh;
+    color: #e85a4f;
   }
   /*#decentralized2 {
     position: fixed;
@@ -84,5 +88,6 @@
     scale: 6;
     top: 73vh;
     left: 80vw;
+    color: #e98074;
   }
 </style>
