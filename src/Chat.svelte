@@ -9,30 +9,41 @@
   // Konfiguration nochmals angeben.
 
   let newMessage;
-  let Messages = [];
-  let chatroom = "chat"; //Set default chatroom to general
+  let messages = [];
+  let chatroom = "chat-general"; //Set default chatroom to general
+  let state1 = gun.get(chatroom);
+  let state2;
 
   function toggleGeneral() {
-    chatroom = "chat";
-    console.log(chatroom);
+    state1 = gun.get(chatroom);
+    chatroom = "chat-general";
+    //console.log(chatroom);
     resetMessages();
   }
 
   function toggleGames() {
+    state1 = gun.get(chatroom);
     chatroom = "chat-games";
-    console.log(chatroom);
+    //console.log(chatroom);
     resetMessages();
   }
 
   function togglePolitics() {
+    state1 = gun.get(chatroom);
     chatroom = "chat-politics";
-    console.log(chatroom);
+    //console.log(chatroom);
     resetMessages();
   }
 
   function resetMessages() {
-    Messages = [];
-    buildMessage();
+    state2 = gun.get(chatroom);
+    if (state1 == state2) {
+      return;
+    } else {
+      buildMessage();
+    }
+    messages = [];
+    console.log(messages);
   }
 
   let navWidth = 0;
@@ -47,6 +58,7 @@
 
   function buildMessage() {
     gun
+      .get("chat")
       .get(chatroom)
       .map()
       .once(async (data, id) => {
@@ -62,10 +74,11 @@
             // Möglichkeit hat die Daten in der Datenbank zu ändern.
             who: data.sender,
             what: (await SEA.decrypt(data.what, key)) + "", // force decrypt as text.
+            when: data.timestamp,
           };
 
           if (message.what) {
-            Messages = [...Messages.slice(-100), message].sort(
+            messages = [...messages.slice(-100), message].sort(
               (a, b) => a.when - b.when
             );
           }
@@ -83,7 +96,9 @@
   });
 
   async function sendMessage() {
-    const index = new Date().toISOString();
+    const minute = new Date().getMinutes();
+    const hour = new Date().getHours();
+    const index = new Date.now();
     // Stelle einfach die Nachricht in den gesamten Chat. Dann können alle
     // aus dem Chatroom die Nachrichten abhören.
     // TODO: Erstelle einzelne Chatrooms. Die könnte man einfach mit
@@ -91,11 +106,12 @@
     // TODO: Verschlüsselung pro Chatroom einführen. Jeder Room hat einen
     // eigenen Schlüssel, damit kann man sicher stellen das nur Personen die
     // den Schlüssel kennen den Chatroom auch lesen können.
-    gun.get(chatroom).set({
+    const temp = {
       sender: $username,
       what: await SEA.encrypt(newMessage, "#dummeyKey"),
       timestamp: index,
-    });
+    };
+    gun.get("chat").get(chatroom).set(temp);
     newMessage = "";
   }
 </script>
@@ -112,7 +128,7 @@
 
     <button on:click={openNav} class="openButton">open</button>
     <main>
-      {#each Messages as message}
+      {#each messages as message}
         <ChatMessage {message} sender={$username} />
       {/each}
     </main>

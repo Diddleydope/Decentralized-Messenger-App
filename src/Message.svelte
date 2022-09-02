@@ -7,6 +7,12 @@
 
 <div class={`message ${messageClass}`}>
   <div class="message-text">
-    <p>{`${message.who}: ${message.what}`}</p>
+    <div>
+      {message.who}: {message.what} <span id="time">{message.when}</span>
+    </div>
+    <p />
   </div>
 </div>
+
+<style>
+</style>

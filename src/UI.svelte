@@ -49,7 +49,7 @@
     position: fixed;
     top: 30vh;
     left: 9.5vw;
-    color: #e85a4f;
+    color: #202020;
   }
   #welcome {
     position: fixed;
@@ -57,7 +57,7 @@
     scale: 12;
     top: 28vh;
     left: 45vw;
-    color: #e85a4f;
+    color: #202020;
   }
   #to {
     position: fixed;
@@ -65,7 +65,7 @@
     scale: 5;
     left: 72vw;
     top: 34vh;
-    color: #e98074;
+    color: #202020;
   }
   #decentralized {
     position: fixed;
@@ -73,7 +73,7 @@
     scale: 7;
     left: 55vw;
     top: 53vh;
-    color: #e85a4f;
+    color: #202020;
   }
   /*#decentralized2 {
     position: fixed;
@@ -88,6 +88,6 @@
     scale: 6;
     top: 73vh;
     left: 80vw;
-    color: #e98074;
+    color: #202020;
   }
 </style>
