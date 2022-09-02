@@ -98,7 +98,7 @@
   async function sendMessage() {
     const minute = new Date().getMinutes();
     const hour = new Date().getHours();
-    const index = new Date.now();
+    const index = hour + ":" + minute;
     // Stelle einfach die Nachricht in den gesamten Chat. Dann können alle
     // aus dem Chatroom die Nachrichten abhören.
     // TODO: Erstelle einzelne Chatrooms. Die könnte man einfach mit
