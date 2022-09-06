@@ -3,47 +3,39 @@
   import ChatMessage from "./Message.svelte";
   import { onMount } from "svelte";
   import { username, gun } from "./user";
+  import { get } from "svelte/store";
   // Importiere gun von user.js. Wir müssen hier keine neue Instanz von Gun
   // erzeugen, weil wir diese bereits in user erstellt haben. Wir möchten hier
   // unbedingt die gleiche Instanz verwenden, ansonsten müssen wir die
   // Konfiguration nochmals angeben.
 
   let newMessage;
-  let messages = [];
+  let messages = new Map(); //Declaring Map
+  messages.set(1, new Array());
+  messages.set(2, new Array());
+  messages.set(3, new Array()); //Setting up Key/Pair values (Arrays)
+  let index = 1; //Parameterised Key, change to acces different Arrays
   let chatroom = "chat-general"; //Set default chatroom to general
-  let state1 = gun.get(chatroom);
-  let state2;
 
   function toggleGeneral() {
-    state1 = gun.get(chatroom);
     chatroom = "chat-general";
-    //console.log(chatroom);
     resetMessages();
   }
 
   function toggleGames() {
-    state1 = gun.get(chatroom);
     chatroom = "chat-games";
-    //console.log(chatroom);
     resetMessages();
   }
 
   function togglePolitics() {
-    state1 = gun.get(chatroom);
     chatroom = "chat-politics";
-    //console.log(chatroom);
     resetMessages();
   }
 
   function resetMessages() {
-    state2 = gun.get(chatroom);
-    if (state1 == state2) {
-      return;
-    } else {
-      buildMessage();
-    }
-    messages = [];
-    console.log(messages);
+    buildMessage();
+    messages.set(index, new Array()); //Empty Array behind the Key, just like i cleared
+    //the array before.
   }
 
   let navWidth = 0;
@@ -67,8 +59,6 @@
           const key = "#dummeyKey";
 
           var message = {
-            // transform the data
-            /* who: await gun.user(data).get("alias"), // a user might lie who they are! So let the user system detect whose data it is. */
             // Zur Zeit muss hier der sender von data verwendet werden. Das
             // sollte auch nicht kritisch sein, da ein Benutzer keine
             // Möglichkeit hat die Daten in der Datenbank zu ändern.
@@ -78,20 +68,24 @@
           };
 
           if (message.what) {
-            messages = [...messages.slice(-100), message].sort(
+            let temp = messages.get(index);
+            temp = [...messages.get(index), message].sort(
               (a, b) => a.when - b.when
             );
+            messages.set(index, temp); //Changing Array through seperate Variable since it
+            //doesn't seem to work directly. Removed .slice since it
+            //was causing problems. TODO: This may be causing problems somehow.
+            //Messages aren't showing up when sent
+            //          old version |
+            /*messages[index] = [   <
+              ...messages.get(index).slice(-100),
+              message,
+            ].sort((a, b) => a.when - b.when);*/
           }
         }
       });
   }
   onMount(() => {
-    // Get Messages
-    // Damit erhalten wir alle Einträge die in der Datenbank unter "chat"
-    // stehen. `map()` iteriert über all die Einträge. Mit der Funktion
-    // `once()` können wir dann auf jedem Dateneintrag die callback funktion
-    // genau einmal aufrufen. Das machen wir weil jeder Eintrag nur einmal im
-    // Chat auftauchen soll.
     buildMessage();
   });
 
@@ -99,10 +93,6 @@
     const minute = new Date().getMinutes();
     const hour = new Date().getHours();
     const index = hour + ":" + minute;
-    // Stelle einfach die Nachricht in den gesamten Chat. Dann können alle
-    // aus dem Chatroom die Nachrichten abhören.
-    // TODO: Erstelle einzelne Chatrooms. Die könnte man einfach mit
-    // "chat-<name>" benennen, dann kann man einfach die Rooms unterscheiden.
     // TODO: Verschlüsselung pro Chatroom einführen. Jeder Room hat einen
     // eigenen Schlüssel, damit kann man sicher stellen das nur Personen die
     // den Schlüssel kennen den Chatroom auch lesen können.
@@ -128,7 +118,8 @@
 
     <button on:click={openNav} class="openButton">open</button>
     <main>
-      {#each messages as message}
+      {#each messages.get(index) as message}
+        <!--Reference Array behind index and loop over it-->
         <ChatMessage {message} sender={$username} />
       {/each}
     </main>
