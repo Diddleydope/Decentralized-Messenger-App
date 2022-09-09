@@ -10,11 +10,9 @@
   // Konfiguration nochmals angeben.
 
   let newMessage;
-  let messages = new Map(); //Declaring Map
-  messages.set(1, new Array());
-  messages.set(2, new Array());
-  messages.set(3, new Array()); //Setting up Key/Pair values (Arrays)
-  let index = 1; //Parameterised Key, change to acces different Arrays
+  let messages = new Array(); //Declaring Map
+  let ids = new Array();
+  let listeners = new Array()
   let chatroom = "chat-general"; //Set default chatroom to general
 
   function toggleGeneral() {
@@ -33,8 +31,11 @@
   }
 
   function resetMessages() {
+    listeners.forEach((l) => {l.off()})
+    listeners = new Array()
+    messages = new Array(); //Empty Array behind the Key, just like i cleared
+    ids = new Array();
     buildMessage();
-    messages.set(index, new Array()); //Empty Array behind the Key, just like i cleared
     //the array before.
   }
 
@@ -53,7 +54,9 @@
       .get("chat")
       .get(chatroom)
       .map()
-      .once(async (data, id) => {
+      .on(async (data, id, _msg, _ev) => {
+        listeners.push(_ev)
+        console.log("garbage")
         if (data) {
           // Key for end-to-end encryption
           const key = "#dummeyKey";
@@ -67,23 +70,21 @@
             when: data.timestamp,
           };
 
+          if (ids.indexOf(id) != -1) { return }
+          else { ids.push(id) }
+
           if (message.what) {
-            let temp = messages.get(index);
-            temp = [...messages.get(index), message].sort(
+            messages = [...messages, message].sort(
               (a, b) => a.when - b.when
             );
-            messages.set(index, temp); //Changing Array through seperate Variable since it
+            /* messages = temp; //Changing Array through seperate Variable since it */
             //doesn't seem to work directly. Removed .slice since it
             //was causing problems. TODO: This may be causing problems somehow.
             //Messages aren't showing up when sent
             //          old version |
-            /*messages[index] = [   <
-              ...messages.get(index).slice(-100),
-              message,
-            ].sort((a, b) => a.when - b.when);*/
           }
         }
-      });
+      }, true);
   }
   onMount(() => {
     buildMessage();
@@ -118,7 +119,7 @@
 
     <button on:click={openNav} class="openButton">open</button>
     <main>
-      {#each messages.get(index) as message}
+      {#each messages as message}
         <!--Reference Array behind index and loop over it-->
         <ChatMessage {message} sender={$username} />
       {/each}
