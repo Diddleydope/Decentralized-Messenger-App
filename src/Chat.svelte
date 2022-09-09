@@ -62,6 +62,8 @@
           const key = "#dummeyKey";
 
           var message = {
+            // transform the data
+            /* who: await gun.user(data).get("alias"), // a user might lie who they are! So let the user system detect whose data it is. */
             // Zur Zeit muss hier der sender von data verwendet werden. Das
             // sollte auch nicht kritisch sein, da ein Benutzer keine
             // Möglichkeit hat die Daten in der Datenbank zu ändern.
@@ -87,6 +89,12 @@
       }, true);
   }
   onMount(() => {
+    // Get Messages
+    // Damit erhalten wir alle Einträge die in der Datenbank unter "chat"
+    // stehen. `map()` iteriert über all die Einträge. Mit der Funktion
+    // `once()` können wir dann auf jedem Dateneintrag die callback funktion
+    // genau einmal aufrufen. Das machen wir weil jeder Eintrag nur einmal im
+    // Chat auftauchen soll.
     buildMessage();
   });
 
@@ -94,6 +102,10 @@
     const minute = new Date().getMinutes();
     const hour = new Date().getHours();
     const index = hour + ":" + minute;
+    // Stelle einfach die Nachricht in den gesamten Chat. Dann können alle
+    // aus dem Chatroom die Nachrichten abhören.
+    // TODO: Erstelle einzelne Chatrooms. Die könnte man einfach mit
+    // "chat-<name>" benennen, dann kann man einfach die Rooms unterscheiden.
     // TODO: Verschlüsselung pro Chatroom einführen. Jeder Room hat einen
     // eigenen Schlüssel, damit kann man sicher stellen das nur Personen die
     // den Schlüssel kennen den Chatroom auch lesen können.
