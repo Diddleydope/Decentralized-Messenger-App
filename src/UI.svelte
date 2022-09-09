@@ -42,6 +42,8 @@
     top: -3vh;
   }
   :global(body) {
+    /*background-image: url("/img/bg.jpg");
+    background-size: cover;*/
     background-color: #eae7dc;
   }
   #login-indicator {

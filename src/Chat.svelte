@@ -7,43 +7,35 @@
   // erzeugen, weil wir diese bereits in user erstellt haben. Wir möchten hier
   // unbedingt die gleiche Instanz verwenden, ansonsten müssen wir die
   // Konfiguration nochmals angeben.
+  //gun.get("chat").get(chatroom).off();
 
   let newMessage;
   let messages = [];
   let chatroom = "chat-general"; //Set default chatroom to general
-  let state1 = gun.get(chatroom);
-  let state2;
+  var lev = null; //used for removing listeners
 
   function toggleGeneral() {
-    state1 = gun.get(chatroom);
     chatroom = "chat-general";
     //console.log(chatroom);
     resetMessages();
   }
 
   function toggleGames() {
-    state1 = gun.get(chatroom);
     chatroom = "chat-games";
     //console.log(chatroom);
     resetMessages();
   }
 
   function togglePolitics() {
-    state1 = gun.get(chatroom);
     chatroom = "chat-politics";
     //console.log(chatroom);
     resetMessages();
   }
 
   function resetMessages() {
-    state2 = gun.get(chatroom);
-    if (state1 == state2) {
-      return;
-    } else {
-      buildMessage();
-    }
+    buildMessage();
     messages = [];
-    console.log(messages);
+    //console.log(messages);
   }
 
   let navWidth = 0;
@@ -61,7 +53,7 @@
       .get("chat")
       .get(chatroom)
       .map()
-      .once(async (data, id) => {
+      .once(async (data) => {
         if (data) {
           // Key for end-to-end encryption
           const key = "#dummeyKey";
@@ -126,14 +118,22 @@
       >
     </div>
 
-    <button on:click={openNav} class="openButton">open</button>
-    <main>
-      {#each messages as message}
-        <ChatMessage {message} sender={$username} />
-      {/each}
-    </main>
+    <div class="chatroom">
+      {chatroom}
+    </div>
 
-    <form on:submit|preventDefault={sendMessage}>
+    <button on:click={openNav} class="openButton">open</button>
+    <div class="chatbox">
+      {#each messages as message}
+        {#if message.who === username}
+          <ChatMessage {message} sender={$username} class="messageSent" />
+        {:else}
+          <ChatMessage {message} sender={$username} class="messageReceived" />
+        {/if}
+      {/each}
+    </div>
+
+    <form on:submit|preventDefault={sendMessage} class="typeBox">
       <input
         type="text"
         placeholder="Type a message..."
@@ -206,5 +206,35 @@
     .sidenav .chatSelect {
       font-size: 18px;
     }
+  }
+
+  .chatbox {
+    border: 0.5vh solid black;
+    border-style: inset;
+    align-content: flex-start;
+    margin-top: 1vh;
+    margin-left: 25vw;
+    width: 60vw;
+    width: clamp(10vw, 70vw, 100vw);
+    height: 50vh;
+    height: clamp(20vh, 70vh, 80vh);
+    overflow: scroll;
+    background-color: #d8c3a5;
+  }
+
+  .typeBox {
+    position: relative;
+    margin-left: 25vw;
+    margin-top: 1vh;
+  }
+
+  .chatroom {
+    position: relative;
+    margin-top: 14vh;
+    margin-bottom: 0vh;
+    margin-left: -30vw;
+    scale: 1.5;
+    color: #d8c3a5;
+    font-weight: bold;
   }
 </style>
