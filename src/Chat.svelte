@@ -8,11 +8,12 @@
   // erzeugen, weil wir diese bereits in user erstellt haben. Wir möchten hier
   // unbedingt die gleiche Instanz verwenden, ansonsten müssen wir die
   // Konfiguration nochmals angeben.
+  //gun.get("chat").get(chatroom).off();
 
   let newMessage;
   let messages = new Array(); //Declaring Map
   let ids = new Array();
-  let listeners = new Array()
+  let listeners = new Array();
   let chatroom = "chat-general"; //Set default chatroom to general
 
   function toggleGeneral() {
@@ -31,8 +32,10 @@
   }
 
   function resetMessages() {
-    listeners.forEach((l) => {l.off()})
-    listeners = new Array()
+    listeners.forEach((l) => {
+      l.off();
+    });
+    listeners = new Array();
     messages = new Array(); //Empty Array behind the Key, just like i cleared
     ids = new Array();
     buildMessage();
@@ -55,8 +58,8 @@
       .get(chatroom)
       .map()
       .on(async (data, id, _msg, _ev) => {
-        listeners.push(_ev)
-        console.log("garbage")
+        listeners.push(_ev);
+        console.log("garbage");
         if (data) {
           // Key for end-to-end encryption
           const key = "#dummeyKey";
@@ -72,13 +75,14 @@
             when: data.timestamp,
           };
 
-          if (ids.indexOf(id) != -1) { return }
-          else { ids.push(id) }
+          if (ids.indexOf(id) != -1) {
+            return;
+          } else {
+            ids.push(id);
+          }
 
           if (message.what) {
-            messages = [...messages, message].sort(
-              (a, b) => a.when - b.when
-            );
+            messages = [...messages, message].sort((a, b) => a.when - b.when);
             /* messages = temp; //Changing Array through seperate Variable since it */
             //doesn't seem to work directly. Removed .slice since it
             //was causing problems. TODO: This may be causing problems somehow.
@@ -129,15 +133,22 @@
       >
     </div>
 
-    <button on:click={openNav} class="openButton">open</button>
-    <main>
-      {#each messages as message}
-        <!--Reference Array behind index and loop over it-->
-        <ChatMessage {message} sender={$username} />
-      {/each}
-    </main>
+    <div class="chatroom">
+      {chatroom}
+    </div>
 
-    <form on:submit|preventDefault={sendMessage}>
+    <button on:click={openNav} class="openButton">open</button>
+    <div class="chatbox">
+      {#each messages as message}
+        {#if message.who === username}
+          <ChatMessage {message} sender={$username} class="messageSent" />
+        {:else}
+          <ChatMessage {message} sender={$username} class="messageReceived" />
+        {/if}
+      {/each}
+    </div>
+
+    <form on:submit|preventDefault={sendMessage} class="typeBox">
       <input
         type="text"
         placeholder="Type a message..."
@@ -210,5 +221,35 @@
     .sidenav .chatSelect {
       font-size: 18px;
     }
+  }
+
+  .chatbox {
+    border: 0.5vh solid black;
+    border-style: inset;
+    align-content: flex-start;
+    margin-top: 1vh;
+    margin-left: 25vw;
+    width: 60vw;
+    width: clamp(10vw, 70vw, 100vw);
+    height: 50vh;
+    height: clamp(20vh, 70vh, 80vh);
+    overflow: scroll;
+    background-color: #d8c3a5;
+  }
+
+  .typeBox {
+    position: relative;
+    margin-left: 25vw;
+    margin-top: 1vh;
+  }
+
+  .chatroom {
+    position: relative;
+    margin-top: 14vh;
+    margin-bottom: 0vh;
+    margin-left: -30vw;
+    scale: 1.5;
+    color: #d8c3a5;
+    font-weight: bold;
   }
 </style>
