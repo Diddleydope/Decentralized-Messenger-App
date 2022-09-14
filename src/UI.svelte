@@ -37,8 +37,8 @@
   #h1 {
     position: fixed;
     scale: 1.5;
-    color: #d8c3a5;
-    left: 3vw;
+    color: #000;
+    right: 3vw;
     top: -3vh;
   }
   :global(body) {

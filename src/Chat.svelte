@@ -10,9 +10,10 @@
   //gun.get("chat").get(chatroom).off();
 
   let newMessage;
-  let messages = [];
+  let messages = new Array(); //Declaring Map
+  let ids = new Array();
+  let listeners = new Array();
   let chatroom = "chat-general"; //Set default chatroom to general
-  var lev = null; //used for removing listeners
 
   function toggleGeneral() {
     chatroom = "chat-general";
@@ -33,9 +34,14 @@
   }
 
   function resetMessages() {
+    listeners.forEach((l) => {
+      l.off();
+    });
+    listeners = new Array();
+    messages = new Array(); //Empty Array behind the Key, just like i cleared
+    ids = new Array();
     buildMessage();
-    messages = [];
-    //console.log(messages);
+    //the array before.
   }
 
   let navWidth = 0;
@@ -53,7 +59,12 @@
       .get("chat")
       .get(chatroom)
       .map()
-      .once(async (data) => {
+      .on(async (data, id, _msg, _ev) => {
+        listeners.push(_ev);
+        console.log("garbage");
+        listeners.push(_ev);
+        console.log("garbage");
+
         if (data) {
           // Key for end-to-end encryption
           const key = "#dummeyKey";
@@ -69,13 +80,17 @@
             when: data.timestamp,
           };
 
+          if (ids.indexOf(id) != -1) {
+            return;
+          } else {
+            ids.push(id);
+          }
+
           if (message.what) {
-            messages = [...messages.slice(-100), message].sort(
-              (a, b) => a.when - b.when
-            );
+            messages = [...messages, message].sort((a, b) => a.when - b.when);
           }
         }
-      });
+      }, true);
   }
   onMount(() => {
     // Get Messages
@@ -108,115 +123,60 @@
   }
 </script>
 
-<div class="container">
-  {#if $username}
-    <div id="mySidenav" class="sidenav" style="width: {navWidth}%">
-      <button class="closebtn" on:click={closeNav}>close</button>
-      <button on:click={toggleGeneral} class="chatSelect">General Chat</button>
-      <button on:click={toggleGames} class="chatSelect">VideoGame Chat</button>
-      <button on:click={togglePolitics} class="chatSelect">Politics Chat</button
-      >
-    </div>
+{#if $username}
+  <button on:click={toggleGeneral} class="chatSelect">General Chat</button>
+  <button on:click={toggleGames} class="chatSelect">VideoGame Chat</button>
+  <button on:click={togglePolitics} class="chatSelect">Politics Chat</button>
 
-    <div class="chatroom">
-      {chatroom}
-    </div>
+  <div class="chatbox">
+    {#each messages as message}
+      {#if message.who === username}
+        <div class="messageSent">
+          <ChatMessage {message} sender={$username} />
+        </div>
+      {:else}
+        <div class="messageReceived">
+          <ChatMessage {message} sender={$username} />
+        </div>
+      {/if}
+    {/each}
+  </div>
 
-    <button on:click={openNav} class="openButton">open</button>
-    <div class="chatbox">
-      {#each messages as message}
-        {#if message.who === username}
-          <ChatMessage {message} sender={$username} class="messageSent" />
-        {:else}
-          <ChatMessage {message} sender={$username} class="messageReceived" />
-        {/if}
-      {/each}
-    </div>
+  <form on:submit|preventDefault={sendMessage} class="typeBox">
+    <input
+      type="text"
+      placeholder="Type a message..."
+      bind:value={newMessage}
+      maxlength="100"
+    />
 
-    <form on:submit|preventDefault={sendMessage} class="typeBox">
-      <input
-        type="text"
-        placeholder="Type a message..."
-        bind:value={newMessage}
-        maxlength="100"
-      />
-
-      <button type="submit" disabled={!newMessage}>✉</button>
-    </form>
-  {:else}
-    <main>
-      <Login />
-    </main>
-  {/if}
-</div>
+    <button type="submit" disabled={!newMessage}>✉</button>
+  </form>
+{:else}
+  <main>
+    <Login />
+  </main>
+{/if}
 
 <style>
-  .openButton {
-    position: absolute;
-    right: 10vw;
-  }
-  /* The side navigation menu */
-  .sidenav {
-    height: 100%; /* 100% Full-height */
-    width: 0; /* 0 width - change this with JavaScript */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Stay on top */
-    top: 0;
-    left: 0;
-    background-color: #f5f0f0; /* Black*/
-    overflow-x: hidden; /* Disable horizontal scroll */
-    padding-top: 60px; /* Place content 60px from the top */
-    transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
-  }
-
-  /* The navigation menu links */
   .chatSelect {
-    padding: 8px 8px 8px 32px;
-    margin-top: 10vh;
-    margin-bottom: 10vh;
-    text-decoration: none;
+    margin: 0;
+    height: 10vh;
+    width: 20vw;
     font-size: 25px;
     display: block;
-    transition: 0.3s;
     color: #c7b7b7;
     background-color: #f5f0f0;
-  }
-
-  /* When you mouse over the navigation links, change their color */
-  .sidenav .chatSelect:hover {
-    color: #f1f1f1;
-  }
-
-  /* Position and style the close button (top right corner) */
-  .sidenav .closebtn {
-    position: absolute;
-    top: 0;
-    right: 25px;
-    font-size: 36px;
-    margin-left: 50px;
-    color: #c7b7b7;
-    background-color: #f5f0f0;
-  }
-
-  /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
-  @media screen and (max-height: 450px) {
-    .sidenav {
-      padding-top: 15px;
-    }
-    .sidenav .chatSelect {
-      font-size: 18px;
-    }
+    border: none;
+    outline: none;
   }
 
   .chatbox {
-    border: 0.5vh solid black;
-    border-style: inset;
+    position: relative;
     align-content: flex-start;
-    margin-top: 1vh;
-    margin-left: 25vw;
-    width: 60vw;
+    margin-top: -34.5vh;
+    margin-left: 20vw;
     width: clamp(10vw, 70vw, 100vw);
-    height: 50vh;
     height: clamp(20vh, 70vh, 80vh);
     overflow: scroll;
     background-color: #d8c3a5;
@@ -226,15 +186,5 @@
     position: relative;
     margin-left: 25vw;
     margin-top: 1vh;
-  }
-
-  .chatroom {
-    position: relative;
-    margin-top: 14vh;
-    margin-bottom: 0vh;
-    margin-left: -30vw;
-    scale: 1.5;
-    color: #d8c3a5;
-    font-weight: bold;
   }
 </style>
