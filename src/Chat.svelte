@@ -3,6 +3,7 @@
   import ChatMessage from "./Message.svelte";
   import { onMount } from "svelte";
   import { username, gun } from "./user";
+  import { HtmlTag } from "svelte/internal";
   // Importiere gun von user.js. Wir müssen hier keine neue Instanz von Gun
   // erzeugen, weil wir diese bereits in user erstellt haben. Wir möchten hier
   // unbedingt die gleiche Instanz verwenden, ansonsten müssen wir die
@@ -13,24 +14,33 @@
   let messages = new Array(); //Declaring Map
   let ids = new Array();
   let listeners = new Array();
-  let chatroom = "chat-general"; //Set default chatroom to general
+  let chatroom = "General Chat"; //Set default chatroom to general
+  let modal;
+  let temp;
 
-  function toggleGeneral() {
-    chatroom = "chat-general";
+  function changeChatroom(input) {
+    chatroom = input;
     //console.log(chatroom);
     resetMessages();
   }
 
-  function toggleGames() {
-    chatroom = "chat-games";
-    //console.log(chatroom);
-    resetMessages();
+  function openNewChat() {
+    /*TODO: Implement this function*/
+    modal.showModal();
   }
 
-  function togglePolitics() {
-    chatroom = "chat-politics";
-    //console.log(chatroom);
-    resetMessages();
+  function closeNewChat() {
+    modal.close();
+  }
+
+  function createNewChat() {
+    let btn = document.createElement("button");
+    btn.innerHTML = temp;
+    btn.className = "chatSelect";
+    btn.addEventListener("click", changeChatroom(btn.innerHTML));
+    document.getElementById("chatroomContainer").appendChild(btn);
+    chatroom = temp;
+    closeNewChat();
   }
 
   function resetMessages() {
@@ -43,16 +53,6 @@
     buildMessage();
     //the array before.
   }
-
-  let navWidth = 0;
-
-  const openNav = () => {
-    navWidth = 30;
-  };
-
-  const closeNav = () => {
-    navWidth = 0;
-  };
 
   function buildMessage() {
     gun
@@ -103,7 +103,10 @@
   });
 
   async function sendMessage() {
-    const minute = new Date().getMinutes();
+    let minute = new Date().getMinutes();
+    if (minute < 10) {
+      minute = "0" + minute;
+    }
     const hour = new Date().getHours();
     const index = hour + ":" + minute;
     // Stelle einfach die Nachricht in den gesamten Chat. Dann können alle
@@ -123,68 +126,161 @@
   }
 </script>
 
-{#if $username}
-  <button on:click={toggleGeneral} class="chatSelect">General Chat</button>
-  <button on:click={toggleGames} class="chatSelect">VideoGame Chat</button>
-  <button on:click={togglePolitics} class="chatSelect">Politics Chat</button>
+<div class="container">
+  {#if $username}
+    <div id="chatroomContainer">
+      <button on:click={() => changeChatroom("General Chat")} class="chatSelect"
+        >General Chat</button
+      >
+      <button
+        on:click={() => changeChatroom("VideoGame Chat")}
+        class="chatSelect">VideoGame Chat</button
+      >
+      <button on:click={() => changeChatroom("Random Chat")} class="chatSelect"
+        >Random Chat</button
+      >
 
-  <div class="chatbox">
-    {#each messages as message}
-      {#if message.who === username}
-        <div class="messageSent">
-          <ChatMessage {message} sender={$username} />
-        </div>
-      {:else}
-        <div class="messageReceived">
-          <ChatMessage {message} sender={$username} />
-        </div>
-      {/if}
-    {/each}
-  </div>
+      <button on:click={openNewChat} id="addChatroom">Add Chatroom</button>
 
-  <form on:submit|preventDefault={sendMessage} class="typeBox">
-    <input
-      type="text"
-      placeholder="Type a message..."
-      bind:value={newMessage}
-      maxlength="100"
-    />
+      <dialog id="newChatWindow" bind:this={modal}>
+        <input
+          bind:value={temp}
+          type="text"
+          placeholder="Enter chatroom name..."
+        />
+        <button id="closeWindow" on:click={closeNewChat}>Close</button>
+        <button id="createChat" on:click={createNewChat}>Create</button>
+      </dialog>
+    </div>
+    <div class="chatbox">
+      {#each messages as message}
+        {#if message.who == $username}
+          <div id="messageSent">
+            <div class="chatBubbleSent">
+              <ChatMessage {message} sender={$username} />
+            </div>
+          </div>
+        {:else}
+          <div id="messageReceived">
+            <div class="chatBubbleReceived">
+              <ChatMessage {message} sender={$username} />
+            </div>
+          </div>
+        {/if}
+      {/each}
+    </div>
+    <form on:submit|preventDefault={sendMessage}>
+      <input
+        type="text"
+        placeholder="Type a message..."
+        bind:value={newMessage}
+        maxlength="100"
+        class="typeBox"
+      />
 
-    <button type="submit" disabled={!newMessage}>✉</button>
-  </form>
-{:else}
-  <main>
-    <Login />
-  </main>
-{/if}
+      <button type="submit" disabled={!newMessage} class="sendButton">✉</button>
+    </form>
+  {:else}
+    <main>
+      <Login />
+    </main>
+  {/if}
+</div>
 
 <style>
+  #chatroomContainer {
+    position: absolute;
+    margin: 0;
+    width: 20vw;
+    height: 80vh;
+    left: 0;
+    top: 10vh;
+    overflow: scroll;
+  }
   .chatSelect {
+    position: relative;
+    margin: 0;
+    top: 0;
+    left: 0.5vw;
     margin: 0;
     height: 10vh;
-    width: 20vw;
+    width: 19.5vw;
     font-size: 25px;
-    display: block;
-    color: #c7b7b7;
-    background-color: #f5f0f0;
+    color: #17252a;
+    background-color: #e8c492;
     border: none;
+    border-radius: 3px;
     outline: none;
+    box-shadow: inset 0 0 0 0 #eae7dc;
+    transition: ease-out 0.2s;
+    display: block;
   }
+  .chatSelect:hover {
+    box-shadow: inset 20vw 0 0 0 #eae7dc;
+  }
+  /*
+  .chatSelect:focus {
+    background-color: #eae7dc;
+  }*/
 
   .chatbox {
-    position: relative;
-    align-content: flex-start;
-    margin-top: -34.5vh;
-    margin-left: 20vw;
+    position: fixed;
+    top: 14vh;
+    left: 20vw;
     width: clamp(10vw, 70vw, 100vw);
     height: clamp(20vh, 70vh, 80vh);
     overflow: scroll;
-    background-color: #d8c3a5;
+    background-color: transparent;
+    height: 76vh;
+    width: 73.5vw;
   }
-
   .typeBox {
+    position: fixed;
+    bottom: 1vh;
+    left: 20.5vw;
+    width: 73vw;
+  }
+  .sendButton {
+    position: fixed;
+    bottom: 1vh;
+    left: 93.75vw;
+    width: 6vw;
+  }
+  #addChatroom {
+    position: fixed;
+    bottom: 1vh;
+    height: 6.5vh;
+    left: 0.5vw;
+    width: 19.5vw;
+    color: #17252a;
+    background-color: #8ad1a9;
+    border: none;
+    outline: none;
+    box-shadow: inset 0 0 0 0 #eae7dc;
+    transition: ease-out 0.2s;
+  }
+  #addChatroom:hover {
+    box-shadow: inset 10vw 0 0 10vw #eae7dc;
+  }
+  #messageReceived {
     position: relative;
-    margin-left: 25vw;
-    margin-top: 1vh;
+    text-align: left;
+    margin-left: 1vw;
+    background-color: #8ad1a9;
+    border-radius: 8px;
+    width: fit-content;
+    padding-left: 1vw;
+    padding-right: 1vw;
+  }
+  #messageSent {
+    position: relative;
+    width: fit-content;
+    margin-right: 1vw;
+    text-align: right;
+    margin-left: auto;
+    border-radius: 8px;
+    background-color: #8ad1a9;
+    padding-right: 1vw;
+    padding-left: 1vw;
   }
 </style>

@@ -35,16 +35,18 @@
 
 <style>
   #h1 {
-    position: fixed;
-    scale: 1.5;
-    color: #000;
-    right: 3vw;
-    top: -3vh;
+    position: absolute;
+    scale: 1.75;
+    color: #d15252;
+    width: 10vw;
+    left: 5vw;
+    right: 85vw;
+    top: -4vh;
   }
   :global(body) {
     /*background-image: url("/img/bg.jpg");
     background-size: cover;*/
-    background-color: #eae7dc;
+    background-color: #f6ebcd;
   }
   #login-indicator {
     scale: 1.5;
