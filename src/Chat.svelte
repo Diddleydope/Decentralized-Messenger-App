@@ -3,20 +3,35 @@
   import ChatMessage from "./Message.svelte";
   import { onMount } from "svelte";
   import { username, gun } from "./user";
-  import { HtmlTag } from "svelte/internal";
   // Importiere gun von user.js. Wir müssen hier keine neue Instanz von Gun
   // erzeugen, weil wir diese bereits in user erstellt haben. Wir möchten hier
   // unbedingt die gleiche Instanz verwenden, ansonsten müssen wir die
   // Konfiguration nochmals angeben.
   //gun.get("chat").get(chatroom).off();
 
+  /*
+  TODO: FIX SPACING BETWEEN MESSAGES
+        AUTOSCROLL
+        ENCRYPTION
+        RELAY SERVERS
+        MAKE ADD CHATROOM AND CHAT SELECT INTO SIDEBAR
+  */
+
+  /*
+  Fragen für Herr Geissmann: Wie kann in in Javascript einem HTML Element eine Klasse zuordnen?
+                            Wie kann ich den Lifetime eines HTML Elements, welches in einer JS
+                            Funktion erstellt wurde kontrollieren?
+                            Quellen?
+                            Etwas zu sagen?
+  */
   let newMessage;
-  let messages = new Array(); //Declaring Map
+  let messages = new Array();
   let ids = new Array();
   let listeners = new Array();
   let chatroom = "General Chat"; //Set default chatroom to general
   let modal;
   let temp;
+  //  let lastMessage;
 
   function changeChatroom(input) {
     chatroom = input;
@@ -36,8 +51,8 @@
   function createNewChat() {
     let btn = document.createElement("button");
     btn.innerHTML = temp;
-    btn.className = "chatSelect";
-    btn.addEventListener("click", changeChatroom(btn.innerHTML));
+    btn.classList.add("chatSelect");
+    btn.onclick = changeChatroom(btn.innerHTML);
     document.getElementById("chatroomContainer").appendChild(btn);
     chatroom = temp;
     closeNewChat();
@@ -48,10 +63,9 @@
       l.off();
     });
     listeners = new Array();
-    messages = new Array(); //Empty Array behind the Key, just like i cleared
+    messages = new Array();
     ids = new Array();
     buildMessage();
-    //the array before.
   }
 
   function buildMessage() {
@@ -111,8 +125,6 @@
     const index = hour + ":" + minute;
     // Stelle einfach die Nachricht in den gesamten Chat. Dann können alle
     // aus dem Chatroom die Nachrichten abhören.
-    // TODO: Erstelle einzelne Chatrooms. Die könnte man einfach mit
-    // "chat-<name>" benennen, dann kann man einfach die Rooms unterscheiden.
     // TODO: Verschlüsselung pro Chatroom einführen. Jeder Room hat einen
     // eigenen Schlüssel, damit kann man sicher stellen das nur Personen die
     // den Schlüssel kennen den Chatroom auch lesen können.
@@ -122,6 +134,10 @@
       timestamp: index,
     };
     gun.get("chat").get(chatroom).set(temp);
+    /*if(temp.sender==lastMessage){
+      messages.classList.add("sameSender");
+    }
+    lastMessage = temp.sender;*/
     newMessage = "";
   }
 </script>
@@ -156,13 +172,13 @@
       {#each messages as message}
         {#if message.who == $username}
           <div id="messageSent">
-            <div class="chatBubbleSent">
+            <div class="chatBubble">
               <ChatMessage {message} sender={$username} />
             </div>
           </div>
         {:else}
           <div id="messageReceived">
-            <div class="chatBubbleReceived">
+            <div class="chatBubble">
               <ChatMessage {message} sender={$username} />
             </div>
           </div>
@@ -206,17 +222,17 @@
     height: 10vh;
     width: 19.5vw;
     font-size: 25px;
-    color: #17252a;
-    background-color: #e8c492;
+    color: darkgrey;
+    background-color: #333333;
     border: none;
     border-radius: 3px;
     outline: none;
-    box-shadow: inset 0 0 0 0 #eae7dc;
+    box-shadow: inset 0 0 0 0 #333333;
     transition: ease-out 0.2s;
     display: block;
   }
   .chatSelect:hover {
-    box-shadow: inset 20vw 0 0 0 #eae7dc;
+    box-shadow: inset 20vw 0 0 0 #1d1d1d;
   }
   /*
   .chatSelect:focus {
@@ -252,21 +268,22 @@
     height: 6.5vh;
     left: 0.5vw;
     width: 19.5vw;
-    color: #17252a;
-    background-color: #8ad1a9;
+    color: darkgrey;
+    background-color: #333333;
     border: none;
     outline: none;
-    box-shadow: inset 0 0 0 0 #eae7dc;
+    box-shadow: inset 0 0 0 0 #333333;
     transition: ease-out 0.2s;
   }
   #addChatroom:hover {
-    box-shadow: inset 10vw 0 0 10vw #eae7dc;
+    box-shadow: inset 10vw 0 0 10vw #1d1d1d;
   }
   #messageReceived {
     position: relative;
+    color: darkgrey;
     text-align: left;
     margin-left: 1vw;
-    background-color: #8ad1a9;
+    background-color: #292929;
     border-radius: 8px;
     width: fit-content;
     padding-left: 1vw;
@@ -274,13 +291,18 @@
   }
   #messageSent {
     position: relative;
+    color: darkgrey;
+    text-align: center;
     width: fit-content;
     margin-right: 1vw;
     text-align: right;
     margin-left: auto;
     border-radius: 8px;
-    background-color: #8ad1a9;
+    background-color: #292929;
     padding-right: 1vw;
     padding-left: 1vw;
   }
+  /*.sameSender{
+    
+  }*/
 </style>

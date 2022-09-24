@@ -37,7 +37,7 @@
   #h1 {
     position: absolute;
     scale: 1.75;
-    color: #d15252;
+    color: #1d1d1d;
     width: 10vw;
     left: 5vw;
     right: 85vw;
@@ -46,7 +46,7 @@
   :global(body) {
     /*background-image: url("/img/bg.jpg");
     background-size: cover;*/
-    background-color: #f6ebcd;
+    background-color: #4d4d4d;
   }
   #login-indicator {
     scale: 1.5;
