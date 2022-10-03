@@ -5,9 +5,8 @@
 <div>
   <div class="message-text">
     <div>
-      {message.who}: {message.what} <span id="time">{message.when}</span>
+      {message.who}: {message.what} <span id="time">{message.when} </span>
     </div>
-    <p />
   </div>
 </div>
 

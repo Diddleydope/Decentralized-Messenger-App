@@ -2,27 +2,16 @@
   import Login from "./Login.svelte";
   import ChatMessage from "./Message.svelte";
   import { onMount } from "svelte";
-  import { username, gun } from "./user";
-  // Importiere gun von user.js. Wir müssen hier keine neue Instanz von Gun
-  // erzeugen, weil wir diese bereits in user erstellt haben. Wir möchten hier
-  // unbedingt die gleiche Instanz verwenden, ansonsten müssen wir die
-  // Konfiguration nochmals angeben.
-  //gun.get("chat").get(chatroom).off();
+  import { username, gun, user } from "./user";
+  import debounce from "lodash.debounce";
+  import SEA from "gun/sea";
 
   /*
-  TODO: FIX SPACING BETWEEN MESSAGES
-        AUTOSCROLL
-        ENCRYPTION
+  TODO: ENCRYPTION
         RELAY SERVERS
         MAKE ADD CHATROOM AND CHAT SELECT INTO SIDEBAR
-  */
-
-  /*
-  Fragen für Herr Geissmann: Wie kann in in Javascript einem HTML Element eine Klasse zuordnen?
-                            Wie kann ich den Lifetime eines HTML Elements, welches in einer JS
-                            Funktion erstellt wurde kontrollieren?
-                            Quellen?
-                            Etwas zu sagen?
+        UI
+        GET A SERVER RUNNING AND LAUNCH IT AND TEST ON MOBILE
   */
   let newMessage;
   let messages = new Array();
@@ -31,7 +20,22 @@
   let chatroom = "General Chat"; //Set default chatroom to general
   let modal;
   let temp;
-  //  let lastMessage;
+  let scrollBottom;
+  let lastScrollTop;
+  let canAutoScroll = true;
+  let unreadMessages;
+
+  function autoScroll() {
+    setTimeout(() => scrollBottom?.scrollIntoView({ behavior: "auto" }), 50);
+    unreadMessages = false;
+  }
+
+  function watchScroll(e) {
+    canAutoScroll = (e.target.scrollTop || Infinity) > lastScrollTop;
+    lastScrollTop = e.target.scrollTop;
+  }
+
+  $: debouncedWatchScroll = debounce(watchScroll, 1000);
 
   function changeChatroom(input) {
     chatroom = input;
@@ -69,18 +73,20 @@
   }
 
   function buildMessage() {
+    console.log("It was called here");
     gun
       .get("chat")
       .get(chatroom)
       .map()
       .on(async (data, id, _msg, _ev) => {
         listeners.push(_ev);
-        console.log("garbage");
+        //console.log("garbage");
         listeners.push(_ev);
-        console.log("garbage");
+        //console.log("garbage");
 
         if (data) {
           // Key for end-to-end encryption
+          //var msg = await SEA.verify(data, pair.pub);
           const key = "#dummeyKey";
 
           var message = {
@@ -92,6 +98,7 @@
             who: data.sender,
             what: (await SEA.decrypt(data.what, key)) + "", // force decrypt as text.
             when: data.timestamp,
+            displayType: 0,
           };
 
           if (ids.indexOf(id) != -1) {
@@ -102,17 +109,29 @@
 
           if (message.what) {
             messages = [...messages, message].sort((a, b) => a.when - b.when);
+            for (let i = 0; i < messages.length; i++) {
+              if (messages[i].who == $username) {
+                messages[i].displayType = 0;
+              } else {
+                messages[i].displayType = 1;
+              }
+            }
+            for (let i = 0; i < messages.length - 1; i++) {
+              if (messages[i].who != messages[i + 1].who) {
+                messages[i].displayType += 2;
+              }
+            }
+
+            if (canAutoScroll) {
+              autoScroll();
+            } else {
+              unreadMessages = true;
+            }
           }
         }
       }, true);
   }
   onMount(() => {
-    // Get Messages
-    // Damit erhalten wir alle Einträge die in der Datenbank unter "chat"
-    // stehen. `map()` iteriert über all die Einträge. Mit der Funktion
-    // `once()` können wir dann auf jedem Dateneintrag die callback funktion
-    // genau einmal aufrufen. Das machen wir weil jeder Eintrag nur einmal im
-    // Chat auftauchen soll.
     buildMessage();
   });
 
@@ -123,8 +142,6 @@
     }
     const hour = new Date().getHours();
     const index = hour + ":" + minute;
-    // Stelle einfach die Nachricht in den gesamten Chat. Dann können alle
-    // aus dem Chatroom die Nachrichten abhören.
     // TODO: Verschlüsselung pro Chatroom einführen. Jeder Room hat einen
     // eigenen Schlüssel, damit kann man sicher stellen das nur Personen die
     // den Schlüssel kennen den Chatroom auch lesen können.
@@ -134,11 +151,9 @@
       timestamp: index,
     };
     gun.get("chat").get(chatroom).set(temp);
-    /*if(temp.sender==lastMessage){
-      messages.classList.add("sameSender");
-    }
-    lastMessage = temp.sender;*/
     newMessage = "";
+    canAutoScroll = true;
+    autoScroll();
   }
 </script>
 
@@ -168,22 +183,26 @@
         <button id="createChat" on:click={createNewChat}>Create</button>
       </dialog>
     </div>
-    <div class="chatbox">
-      {#each messages as message}
-        {#if message.who == $username}
-          <div id="messageSent">
-            <div class="chatBubble">
+    <div id="lineDiv">
+      <div id="chatIndicator">{chatroom}</div>
+      <div id="chatbox" on:scroll={debouncedWatchScroll}>
+        {#each messages as message}
+          {#if message.displayType == 0 || message.displayType == 2}
+            <div id="messageSent">
               <ChatMessage {message} sender={$username} />
             </div>
-          </div>
-        {:else}
-          <div id="messageReceived">
-            <div class="chatBubble">
-              <ChatMessage {message} sender={$username} />
+          {:else if message.displayType == 1}
+            <div id="messageReceivedClose">
+              <ChatMessage {message} sender={message.who} />
             </div>
-          </div>
-        {/if}
-      {/each}
+          {:else if message.displayType == 3}
+            <div id="messageReceivedSpace">
+              <ChatMessage {message} sender={message.who} />
+            </div>
+          {/if}
+        {/each}
+        <div class="dummy" bind:this={scrollBottom} />
+      </div>
     </div>
     <form on:submit|preventDefault={sendMessage}>
       <input
@@ -239,7 +258,7 @@
     background-color: #eae7dc;
   }*/
 
-  .chatbox {
+  #chatbox {
     position: fixed;
     top: 14vh;
     left: 20vw;
@@ -278,7 +297,8 @@
   #addChatroom:hover {
     box-shadow: inset 10vw 0 0 10vw #1d1d1d;
   }
-  #messageReceived {
+
+  #messageReceivedClose {
     position: relative;
     color: darkgrey;
     text-align: left;
@@ -288,11 +308,25 @@
     width: fit-content;
     padding-left: 1vw;
     padding-right: 1vw;
+    margin-bottom: 0.25vh;
   }
+
+  #messageReceivedSpace {
+    position: relative;
+    color: darkgrey;
+    text-align: left;
+    margin-left: 1vw;
+    background-color: #292929;
+    border-radius: 8px;
+    width: fit-content;
+    padding-left: 1vw;
+    padding-right: 1vw;
+    margin-bottom: 1.5vh;
+  }
+
   #messageSent {
     position: relative;
     color: darkgrey;
-    text-align: center;
     width: fit-content;
     margin-right: 1vw;
     text-align: right;
@@ -301,8 +335,22 @@
     background-color: #292929;
     padding-right: 1vw;
     padding-left: 1vw;
+    margin-bottom: 0.25vh;
   }
-  /*.sameSender{
-    
-  }*/
+
+  #lineDiv {
+    position: relative;
+    border-bottom: 5px solid #1d1d1d;
+    width: 73.5vw;
+    left: 19vw;
+  }
+
+  #chatIndicator {
+    position: relative;
+    scale: 1.5;
+    color: #1d1d1d;
+    font-weight: bold;
+    left: 25vw;
+    margin-bottom: 1vh;
+  }
 </style>
