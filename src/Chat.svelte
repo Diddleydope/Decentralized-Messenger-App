@@ -7,9 +7,10 @@
   import SEA from "gun/sea";
 
   /*
-  TODO: ENCRYPTION
+  TODO: MESSAGES NOT ORDERED UPON LOADING IN
+        ADD CHATROOMS
+        ENCRYPTION
         RELAY SERVERS
-        MAKE ADD CHATROOM AND CHAT SELECT INTO SIDEBAR
         UI
         GET A SERVER RUNNING AND LAUNCH IT AND TEST ON MOBILE
   */
@@ -19,6 +20,7 @@
   let listeners = new Array();
   let chatroom = "General Chat"; //Set default chatroom to general
   let modal;
+  let chatroomSelect;
   let temp;
   let scrollBottom;
   let lastScrollTop;
@@ -50,6 +52,14 @@
 
   function closeNewChat() {
     modal.close();
+  }
+
+  function openChatSelect() {
+    chatroomSelect.showModal();
+  }
+
+  function closeChatSelect() {
+    chatroomSelect.close();
   }
 
   function createNewChat() {
@@ -159,18 +169,26 @@
 
 <div class="container">
   {#if $username}
-    <div id="chatroomContainer">
-      <button on:click={() => changeChatroom("General Chat")} class="chatSelect"
-        >General Chat</button
-      >
-      <button
-        on:click={() => changeChatroom("VideoGame Chat")}
-        class="chatSelect">VideoGame Chat</button
-      >
-      <button on:click={() => changeChatroom("Random Chat")} class="chatSelect"
-        >Random Chat</button
-      >
+    <button id="openChatSelect" on:click={openChatSelect}
+      >change chatroom</button
+    >
 
+    <dialog class="chatroomMenu" bind:this={chatroomSelect}>
+      <button on:click={closeChatSelect} id="chatroomSelectClose">close</button>
+      <div id="chatroomContainer">
+        <button
+          on:click={() => changeChatroom("General Chat")}
+          class="chatSelect">General Chat</button
+        >
+        <button
+          on:click={() => changeChatroom("VideoGame Chat")}
+          class="chatSelect">VideoGame Chat</button
+        >
+        <button
+          on:click={() => changeChatroom("Random Chat")}
+          class="chatSelect">Random Chat</button
+        >
+      </div>
       <button on:click={openNewChat} id="addChatroom">Add Chatroom</button>
 
       <dialog id="newChatWindow" bind:this={modal}>
@@ -182,13 +200,17 @@
         <button id="closeWindow" on:click={closeNewChat}>Close</button>
         <button id="createChat" on:click={createNewChat}>Create</button>
       </dialog>
-    </div>
+    </dialog>
     <div id="lineDiv">
       <div id="chatIndicator">{chatroom}</div>
       <div id="chatbox" on:scroll={debouncedWatchScroll}>
         {#each messages as message}
-          {#if message.displayType == 0 || message.displayType == 2}
-            <div id="messageSent">
+          {#if message.displayType == 0}
+            <div id="messageSentClose">
+              <ChatMessage {message} sender={$username} />
+            </div>
+          {:else if message.displayType == 2}
+            <div id="messageSentSpace">
               <ChatMessage {message} sender={$username} />
             </div>
           {:else if message.displayType == 1}
@@ -223,15 +245,15 @@
 </div>
 
 <style>
-  #chatroomContainer {
-    position: absolute;
-    margin: 0;
-    width: 20vw;
-    height: 80vh;
-    left: 0;
-    top: 10vh;
-    overflow: scroll;
+  .chatroomMenu {
+    width: 90vw;
+    height: 90vh;
+    background-color: #292929;
   }
+  ::-webkit-scrollbar {
+    width: 0px;
+  }
+
   .chatSelect {
     position: relative;
     margin: 0;
@@ -260,28 +282,28 @@
 
   #chatbox {
     position: fixed;
-    top: 14vh;
-    left: 20vw;
-    width: clamp(10vw, 70vw, 100vw);
-    height: clamp(20vh, 70vh, 80vh);
-    overflow: scroll;
+    top: 12.5vh;
+    width: 96vw;
+    height: auto;
+    overflow-y: scroll;
     background-color: transparent;
     height: 76vh;
-    width: 73.5vw;
+    border: 5px solid #1d1d1d;
+    border-style: dotted;
   }
   .typeBox {
-    position: fixed;
+    position: absolute;
     bottom: 1vh;
     left: 20.5vw;
     width: 73vw;
   }
   .sendButton {
-    position: fixed;
+    position: absolute;
     bottom: 1vh;
     left: 93.75vw;
     width: 6vw;
   }
-  #addChatroom {
+  #openChatSelect {
     position: fixed;
     bottom: 1vh;
     height: 6.5vh;
@@ -299,6 +321,7 @@
   }
 
   #messageReceivedClose {
+    font-size: large;
     position: relative;
     color: darkgrey;
     text-align: left;
@@ -312,6 +335,7 @@
   }
 
   #messageReceivedSpace {
+    font-size: large;
     position: relative;
     color: darkgrey;
     text-align: left;
@@ -324,7 +348,8 @@
     margin-bottom: 1.5vh;
   }
 
-  #messageSent {
+  #messageSentClose {
+    font-size: large;
     position: relative;
     color: darkgrey;
     width: fit-content;
@@ -337,12 +362,25 @@
     padding-left: 1vw;
     margin-bottom: 0.25vh;
   }
+  #messageSentSpace {
+    font-size: large;
+    position: relative;
+    color: darkgrey;
+    width: fit-content;
+    margin-right: 1vw;
+    text-align: right;
+    margin-left: auto;
+    border-radius: 8px;
+    background-color: #292929;
+    padding-right: 1vw;
+    padding-left: 1vw;
+    margin-bottom: 1.5vh;
+  }
 
   #lineDiv {
     position: relative;
     border-bottom: 5px solid #1d1d1d;
-    width: 73.5vw;
-    left: 19vw;
+    width: 95vw;
   }
 
   #chatIndicator {
@@ -350,7 +388,34 @@
     scale: 1.5;
     color: #1d1d1d;
     font-weight: bold;
-    left: 25vw;
+    left: 80vw;
     margin-bottom: 1vh;
+    width: fit-content;
+  }
+  #chatroomSelectClose {
+    position: fixed;
+    right: 5vw;
+    top: 2.5vh;
+  }
+  #addChatroom {
+    position: fixed;
+    right: 5vw;
+    bottom: 2vh;
+    width: 90vw;
+  }
+  #chatroomContainer {
+    position: relative;
+    left: 3vw;
+    top: 6vh;
+    bottom: 1vh;
+    height: 75vh;
+    width: 85vw;
+    overflow: scroll;
+    display: grid;
+    row-gap: 4vw;
+    column-gap: 2vh;
+    grid-template-columns: repeat(4, auto);
+    align-items: center;
+    justify-items: center;
   }
 </style>

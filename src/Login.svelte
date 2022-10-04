@@ -9,6 +9,7 @@
       password,
       console.log("username or password incorrect")
     );
+    $username = username;
   }
   function signup() {
     user.create(username, password);
