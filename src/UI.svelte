@@ -21,7 +21,10 @@
     href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap"
     rel="stylesheet"
   />
-  <h1 id="h1"><i>ᴅᴀᴘᴘʀ</i></h1>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bungee+Shade&display=swap"
+    rel="stylesheet"
+  />
 
   {#if !$username}
     <div id="login-indicator">Login⏎</div>
@@ -34,19 +37,10 @@
 </div>
 
 <style>
-  #h1 {
-    position: absolute;
-    scale: 1.75;
-    color: #1d1d1d;
-    width: 10vw;
-    left: 5vw;
-    right: 85vw;
-    top: -4vh;
-  }
   :global(body) {
-    /*background-image: url("/img/bg.jpg");
-    background-size: cover;*/
-    background-color: #4d4d4d;
+    background-color: #242526;
+    background-image: url("background.png");
+    background-repeat: repeat;
   }
   #login-indicator {
     scale: 1.5;

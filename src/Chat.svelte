@@ -188,6 +188,54 @@
           on:click={() => changeChatroom("Random Chat")}
           class="chatSelect">Random Chat</button
         >
+        <button
+          on:click={() => changeChatroom("Random Chat")}
+          class="chatSelect">Random Chat</button
+        >
+        <button
+          on:click={() => changeChatroom("Random Chat")}
+          class="chatSelect">Random Chat</button
+        >
+        <button
+          on:click={() => changeChatroom("Random Chat")}
+          class="chatSelect">Random Chat</button
+        >
+        <button
+          on:click={() => changeChatroom("Random Chat")}
+          class="chatSelect">Random Chat</button
+        >
+        <button
+          on:click={() => changeChatroom("Random Chat")}
+          class="chatSelect">Random Chat</button
+        >
+        <button
+          on:click={() => changeChatroom("Random Chat")}
+          class="chatSelect">Random Chat</button
+        >
+        <button
+          on:click={() => changeChatroom("Random Chat")}
+          class="chatSelect">Random Chat</button
+        >
+        <button
+          on:click={() => changeChatroom("Random Chat")}
+          class="chatSelect">Random Chat</button
+        >
+        <button
+          on:click={() => changeChatroom("Random Chat")}
+          class="chatSelect">Random Chat</button
+        >
+        <button
+          on:click={() => changeChatroom("Random Chat")}
+          class="chatSelect">Random Chat</button
+        >
+        <button
+          on:click={() => changeChatroom("Random Chat")}
+          class="chatSelect">Random Chat</button
+        >
+        <button
+          on:click={() => changeChatroom("Random Chat")}
+          class="chatSelect">Random Chat</button
+        >
       </div>
       <button on:click={openNewChat} id="addChatroom">Add Chatroom</button>
 
@@ -201,29 +249,32 @@
         <button id="createChat" on:click={createNewChat}>Create</button>
       </dialog>
     </dialog>
-    <div id="lineDiv">
-      <div id="chatIndicator">{chatroom}</div>
-      <div id="chatbox" on:scroll={debouncedWatchScroll}>
-        {#each messages as message}
-          {#if message.displayType == 0}
-            <div id="messageSentClose">
-              <ChatMessage {message} sender={$username} />
-            </div>
-          {:else if message.displayType == 2}
-            <div id="messageSentSpace">
-              <ChatMessage {message} sender={$username} />
-            </div>
-          {:else if message.displayType == 1}
-            <div id="messageReceivedClose">
-              <ChatMessage {message} sender={message.who} />
-            </div>
-          {:else if message.displayType == 3}
-            <div id="messageReceivedSpace">
-              <ChatMessage {message} sender={message.who} />
-            </div>
-          {/if}
-        {/each}
-        <div class="dummy" bind:this={scrollBottom} />
+    <div id="lineDivBottom">
+      <div id="lineDivTop">
+        <div id="chatIndicator">{chatroom}</div>
+        <h1 id="h1"><i>Dappr</i></h1>
+        <div id="chatbox" on:scroll={debouncedWatchScroll}>
+          {#each messages as message}
+            {#if message.displayType == 0}
+              <div id="messageSentClose">
+                <ChatMessage {message} sender={$username} />
+              </div>
+            {:else if message.displayType == 2}
+              <div id="messageSentSpace">
+                <ChatMessage {message} sender={$username} />
+              </div>
+            {:else if message.displayType == 1}
+              <div id="messageReceivedClose">
+                <ChatMessage {message} sender={message.who} />
+              </div>
+            {:else if message.displayType == 3}
+              <div id="messageReceivedSpace">
+                <ChatMessage {message} sender={message.who} />
+              </div>
+            {/if}
+          {/each}
+          <div class="dummy" bind:this={scrollBottom} />
+        </div>
       </div>
     </div>
     <form on:submit|preventDefault={sendMessage}>
@@ -242,13 +293,21 @@
       <Login />
     </main>
   {/if}
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bungee+Shade&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Codystar&display=swap"
+    rel="stylesheet"
+  />
 </div>
 
 <style>
   .chatroomMenu {
     width: 90vw;
     height: 90vh;
-    background-color: #292929;
+    background-color: #242526;
   }
   ::-webkit-scrollbar {
     width: 0px;
@@ -263,17 +322,17 @@
     height: 10vh;
     width: 19.5vw;
     font-size: 25px;
-    color: darkgrey;
-    background-color: #333333;
+    color: whitesmoke;
+    background-color: #3a3b3c;
     border: none;
     border-radius: 3px;
     outline: none;
-    box-shadow: inset 0 0 0 0 #333333;
+    box-shadow: inset 0 0 0 0 #b0b3b8;
     transition: ease-out 0.2s;
     display: block;
   }
   .chatSelect:hover {
-    box-shadow: inset 20vw 0 0 0 #1d1d1d;
+    box-shadow: inset 20vw 0 0 0 #b0b3b8;
   }
   /*
   .chatSelect:focus {
@@ -282,14 +341,12 @@
 
   #chatbox {
     position: fixed;
-    top: 12.5vh;
+    top: 13.5vh;
     width: 96vw;
     height: auto;
     overflow-y: scroll;
     background-color: transparent;
     height: 76vh;
-    border: 5px solid #1d1d1d;
-    border-style: dotted;
   }
   .typeBox {
     position: absolute;
@@ -309,8 +366,8 @@
     height: 6.5vh;
     left: 0.5vw;
     width: 19.5vw;
-    color: darkgrey;
-    background-color: #333333;
+    color: whitesmoke;
+    background-color: #18191a;
     border: none;
     outline: none;
     box-shadow: inset 0 0 0 0 #333333;
@@ -323,10 +380,10 @@
   #messageReceivedClose {
     font-size: large;
     position: relative;
-    color: darkgrey;
+    color: whitesmoke;
     text-align: left;
     margin-left: 1vw;
-    background-color: #292929;
+    background-color: #3a3b3c;
     border-radius: 8px;
     width: fit-content;
     padding-left: 1vw;
@@ -337,10 +394,10 @@
   #messageReceivedSpace {
     font-size: large;
     position: relative;
-    color: darkgrey;
+    color: whitesmoke;
     text-align: left;
     margin-left: 1vw;
-    background-color: #292929;
+    background-color: #3a3b3c;
     border-radius: 8px;
     width: fit-content;
     padding-left: 1vw;
@@ -351,13 +408,13 @@
   #messageSentClose {
     font-size: large;
     position: relative;
-    color: darkgrey;
+    color: whitesmoke;
     width: fit-content;
     margin-right: 1vw;
     text-align: right;
     margin-left: auto;
     border-radius: 8px;
-    background-color: #292929;
+    background-color: #3a3b3c;
     padding-right: 1vw;
     padding-left: 1vw;
     margin-bottom: 0.25vh;
@@ -365,32 +422,57 @@
   #messageSentSpace {
     font-size: large;
     position: relative;
-    color: darkgrey;
+    color: whitesmoke;
     width: fit-content;
     margin-right: 1vw;
     text-align: right;
     margin-left: auto;
     border-radius: 8px;
-    background-color: #292929;
+    background-color: #3a3b3c;
     padding-right: 1vw;
     padding-left: 1vw;
     margin-bottom: 1.5vh;
   }
-
-  #lineDiv {
-    position: relative;
-    border-bottom: 5px solid #1d1d1d;
-    width: 95vw;
-  }
-
   #chatIndicator {
     position: relative;
     scale: 1.5;
-    color: #1d1d1d;
+    color: #e4e6eb;
     font-weight: bold;
-    left: 80vw;
+    left: 75vw;
     margin-bottom: 1vh;
     width: fit-content;
+    font-family: "Bungee Shade", cursive;
+    top: 10vh;
+    transition: ease 0.3s;
+  }
+  #chatIndicator:hover {
+    scale: 1.7;
+  }
+  #h1 {
+    position: fixed;
+    left: 5vw;
+    right: 85vw;
+    top: -5vh;
+    font-family: "Bungee Shade", cursive;
+    scale: 1.3;
+    color: #e4e6eb;
+    transition: ease 0.3s;
+  }
+  #h1:hover {
+    letter-spacing: 0.3vw;
+  }
+
+  #lineDivBottom {
+    position: relative;
+    border-bottom: 5px solid #b0b3b8;
+    width: 95vw;
+    bottom: 2.5vh;
+  }
+  #lineDivTop {
+    position: relative;
+    border-bottom: 5px solid #b0b3b8;
+    width: 95vw;
+    bottom: 9vh;
   }
   #chatroomSelectClose {
     position: fixed;
