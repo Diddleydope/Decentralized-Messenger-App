@@ -46,46 +46,45 @@
     scale: 1.5;
     position: fixed;
     top: 30vh;
-    left: 9.5vw;
-    color: #202020;
+    left: 9vw;
+    font-family: "Bungee Shade", cursive;
+    color: whitesmoke;
   }
   #welcome {
     position: fixed;
-    font-family: "Bebas Neue", cursive;
-    scale: 12;
+    font-family: "Bungee Shade", cursive;
+    scale: 7;
     top: 28vh;
     left: 45vw;
-    color: #202020;
+    color: whitesmoke;
   }
   #to {
     position: fixed;
-    font-family: "Bebas Neue", cursive;
-    scale: 5;
-    left: 72vw;
-    top: 34vh;
-    color: #202020;
+    font-family: "Bungee Shade", cursive;
+    scale: 4;
+    left: 77vw;
+    top: 33vh;
+    color: whitesmoke;
   }
   #decentralized {
     position: fixed;
     font-family: "Codystar", cursive, bold;
+    letter-spacing: 0.04vw;
     scale: 7;
     left: 55vw;
     top: 53vh;
-    color: #202020;
+    color: #b0b3b8;
+    transition: ease 0.3s;
   }
-  /*#decentralized2 {
-    position: fixed;
-    font-family: "Codystar", cursive, bold;
-    scale: 7;
-    left: 77vw;
-    top: 45vh;
-  }*/
+  #decentralized:hover {
+    letter-spacing: 0.08vw;
+  }
   #messaging {
     position: fixed;
-    font-family: "Bebas Neue", cursive;
+    font-family: "Bungee Shade", cursive;
     scale: 6;
-    top: 73vh;
-    left: 80vw;
-    color: #202020;
+    top: 70vh;
+    left: 65vw;
+    color: whitesmoke;
   }
 </style>

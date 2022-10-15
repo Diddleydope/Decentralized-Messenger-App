@@ -43,26 +43,30 @@
     position: relative;
     top: 15vh;
     scale: 1.5;
-    background-color: #eae7dc;
+    background-color: whitesmoke;
+    width: 16vw;
   }
   #pass {
     position: relative;
     top: 15vh;
     scale: 1.5;
-    background-color: #eae7dc;
+    background-color: whitesmoke;
+    width: 16vw;
   }
   #in {
     position: relative;
     top: 20vh;
     scale: 1.5;
-    margin-right: 2vw;
-    background-color: #eae7dc;
+    right: 2vw;
+    background-color: #b0b3b8;
+    width: 8vw;
   }
   #up {
     position: relative;
     top: 20vh;
     scale: 1.5;
-    margin-left: 2vw;
-    background-color: #eae7dc;
+    left: 2vw;
+    background-color: #b0b3b8;
+    width: 8vw;
   }
 </style>

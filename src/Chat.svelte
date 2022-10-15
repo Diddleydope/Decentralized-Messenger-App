@@ -5,17 +5,24 @@
   import { username, gun, user } from "./user";
   import debounce from "lodash.debounce";
   import SEA from "gun/sea";
+  /*FRAGEN HERR GEISSMANN:
+    image.png-QUELLENANGABE: LOOKS UGLY UND WELCHE LIBRARY/ANGABEN?
+    -RELAY SERVERS/ DAS GANZE OHNE LOCAL SERVER LAUFEN LASSEN
+    -DOMAIN?
+    -ENCRYPTION?
+    -FEEDBACK, WAS ZU SAGEN?
+  */
 
   /*
   TODO: MESSAGES NOT ORDERED UPON LOADING IN
         ADD CHATROOMS
         ENCRYPTION
         RELAY SERVERS
-        UI
         GET A SERVER RUNNING AND LAUNCH IT AND TEST ON MOBILE
   */
   let newMessage;
   let messages = new Array();
+  let chatrooms = new Array();
   let ids = new Array();
   let listeners = new Array();
   let chatroom = "General Chat"; //Set default chatroom to general
@@ -63,12 +70,7 @@
   }
 
   function createNewChat() {
-    let btn = document.createElement("button");
-    btn.innerHTML = temp;
-    btn.classList.add("chatSelect");
-    btn.onclick = changeChatroom(btn.innerHTML);
-    document.getElementById("chatroomContainer").appendChild(btn);
-    chatroom = temp;
+    gun.get("chat").get("chatrooms").set(temp);
     closeNewChat();
   }
 
@@ -80,6 +82,37 @@
     messages = new Array();
     ids = new Array();
     buildMessage();
+  }
+
+  function buildChatrooms() {
+    gun
+      .get("chat")
+      .get("chatrooms")
+      .map()
+      .on(async (data, id, _msg, _ev) => {
+        listeners.push(_ev);
+        //console.log("garbage");
+        listeners.push(_ev);
+        //console.log("garbage");
+
+        if (data) {
+          var tempChatroom = data;
+
+          //chatrooms.push(tempChatroom);
+          if (!chatrooms.includes(tempChatroom)) {
+            chatrooms = [...chatrooms, tempChatroom].sort(
+              (a, b) => a.when - b.when
+            );
+          }
+          console.log(chatrooms);
+
+          if (ids.indexOf(id) != -1) {
+            return;
+          } else {
+            ids.push(id);
+          }
+        }
+      }, true);
   }
 
   function buildMessage() {
@@ -96,15 +129,10 @@
 
         if (data) {
           // Key for end-to-end encryption
-          //var msg = await SEA.verify(data, pair.pub);
           const key = "#dummeyKey";
 
           var message = {
             // transform the data
-            /* who: await gun.user(data).get("alias"), // a user might lie who they are! So let the user system detect whose data it is. */
-            // Zur Zeit muss hier der sender von data verwendet werden. Das
-            // sollte auch nicht kritisch sein, da ein Benutzer keine
-            // Möglichkeit hat die Daten in der Datenbank zu ändern.
             who: data.sender,
             what: (await SEA.decrypt(data.what, key)) + "", // force decrypt as text.
             when: data.timestamp,
@@ -143,6 +171,7 @@
   }
   onMount(() => {
     buildMessage();
+    buildChatrooms();
   });
 
   async function sendMessage() {
@@ -178,64 +207,23 @@
       <div id="chatroomContainer">
         <button
           on:click={() => changeChatroom("General Chat")}
-          class="chatSelect">General Chat</button
+          class="chatSelect"
+          id="defaultbutton">General Chat</button
+        >
+        <button
+          on:click={() => changeChatroom("Sports Chat")}
+          class="chatSelect">Sports Chat</button
         >
         <button
           on:click={() => changeChatroom("VideoGame Chat")}
           class="chatSelect">VideoGame Chat</button
         >
-        <button
-          on:click={() => changeChatroom("Random Chat")}
-          class="chatSelect">Random Chat</button
-        >
-        <button
-          on:click={() => changeChatroom("Random Chat")}
-          class="chatSelect">Random Chat</button
-        >
-        <button
-          on:click={() => changeChatroom("Random Chat")}
-          class="chatSelect">Random Chat</button
-        >
-        <button
-          on:click={() => changeChatroom("Random Chat")}
-          class="chatSelect">Random Chat</button
-        >
-        <button
-          on:click={() => changeChatroom("Random Chat")}
-          class="chatSelect">Random Chat</button
-        >
-        <button
-          on:click={() => changeChatroom("Random Chat")}
-          class="chatSelect">Random Chat</button
-        >
-        <button
-          on:click={() => changeChatroom("Random Chat")}
-          class="chatSelect">Random Chat</button
-        >
-        <button
-          on:click={() => changeChatroom("Random Chat")}
-          class="chatSelect">Random Chat</button
-        >
-        <button
-          on:click={() => changeChatroom("Random Chat")}
-          class="chatSelect">Random Chat</button
-        >
-        <button
-          on:click={() => changeChatroom("Random Chat")}
-          class="chatSelect">Random Chat</button
-        >
-        <button
-          on:click={() => changeChatroom("Random Chat")}
-          class="chatSelect">Random Chat</button
-        >
-        <button
-          on:click={() => changeChatroom("Random Chat")}
-          class="chatSelect">Random Chat</button
-        >
-        <button
-          on:click={() => changeChatroom("Random Chat")}
-          class="chatSelect">Random Chat</button
-        >
+        {#each chatrooms as tempChatroom}
+          <button
+            on:click={() => changeChatroom(tempChatroom)}
+            class="chatSelect">{tempChatroom}</button
+          >
+        {/each}
       </div>
       <button on:click={openNewChat} id="addChatroom">Add Chatroom</button>
 
@@ -319,7 +307,7 @@
     top: 0;
     left: 0.5vw;
     margin: 0;
-    height: 10vh;
+    height: 15vh;
     width: 19.5vw;
     font-size: 25px;
     color: whitesmoke;
@@ -362,6 +350,7 @@
   }
   #openChatSelect {
     position: fixed;
+    font-size: medium;
     bottom: 1vh;
     height: 6.5vh;
     left: 0.5vw;
@@ -370,11 +359,10 @@
     background-color: #18191a;
     border: none;
     outline: none;
-    box-shadow: inset 0 0 0 0 #333333;
-    transition: ease-out 0.2s;
+    transition: ease 0.3s;
   }
-  #addChatroom:hover {
-    box-shadow: inset 10vw 0 0 10vw #1d1d1d;
+  #openChatSelect:hover {
+    font-size: large;
   }
 
   #messageReceivedClose {
@@ -386,8 +374,6 @@
     background-color: #3a3b3c;
     border-radius: 8px;
     width: fit-content;
-    padding-left: 1vw;
-    padding-right: 1vw;
     margin-bottom: 0.25vh;
   }
 
@@ -400,9 +386,7 @@
     background-color: #3a3b3c;
     border-radius: 8px;
     width: fit-content;
-    padding-left: 1vw;
-    padding-right: 1vw;
-    margin-bottom: 1.5vh;
+    margin-bottom: 2vh;
   }
 
   #messageSentClose {
@@ -415,8 +399,6 @@
     margin-left: auto;
     border-radius: 8px;
     background-color: #3a3b3c;
-    padding-right: 1vw;
-    padding-left: 1vw;
     margin-bottom: 0.25vh;
   }
   #messageSentSpace {
@@ -429,9 +411,7 @@
     margin-left: auto;
     border-radius: 8px;
     background-color: #3a3b3c;
-    padding-right: 1vw;
-    padding-left: 1vw;
-    margin-bottom: 1.5vh;
+    margin-bottom: 2vh;
   }
   #chatIndicator {
     position: relative;
@@ -456,7 +436,7 @@
     font-family: "Bungee Shade", cursive;
     scale: 1.3;
     color: #e4e6eb;
-    transition: ease 0.3s;
+    transition: ease-out 0.3s;
   }
   #h1:hover {
     letter-spacing: 0.3vw;
@@ -478,12 +458,16 @@
     position: fixed;
     right: 5vw;
     top: 2.5vh;
+    background-color: #b0b3b8;
+    color: black;
   }
   #addChatroom {
     position: fixed;
     right: 5vw;
     bottom: 2vh;
     width: 90vw;
+    background-color: #b0b3b8;
+    color: black;
   }
   #chatroomContainer {
     position: relative;
@@ -494,10 +478,205 @@
     width: 85vw;
     overflow: scroll;
     display: grid;
-    row-gap: 4vw;
+    row-gap: 2vw;
     column-gap: 2vh;
     grid-template-columns: repeat(4, auto);
     align-items: center;
     justify-items: center;
+  }
+
+  @media all and (max-width: 500px) {
+    .chatroomMenu {
+      width: 90vw;
+      height: 90vh;
+      background-color: #242526;
+    }
+    ::-webkit-scrollbar {
+      width: 0px;
+    }
+
+    .chatSelect {
+      position: relative;
+      margin: 0;
+      top: 0;
+      left: 0.5vw;
+      margin: 0;
+      height: 15vh;
+      width: 19.5vw;
+      font-size: 25px;
+      color: whitesmoke;
+      background-color: #3a3b3c;
+      border: none;
+      border-radius: 3px;
+      outline: none;
+      box-shadow: inset 0 0 0 0 #b0b3b8;
+      transition: ease-out 0.2s;
+      display: block;
+    }
+    .chatSelect:hover {
+      box-shadow: inset 20vw 0 0 0 #b0b3b8;
+    }
+    /*
+  .chatSelect:focus {
+    background-color: #eae7dc;
+  }*/
+
+    #chatbox {
+      position: fixed;
+      top: 13.5vh;
+      width: 96vw;
+      height: auto;
+      overflow-y: scroll;
+      background-color: transparent;
+      height: 76vh;
+    }
+    .typeBox {
+      position: absolute;
+      bottom: 1vh;
+      left: 20.5vw;
+      width: 73vw;
+    }
+    .sendButton {
+      position: absolute;
+      bottom: 1vh;
+      left: 93.75vw;
+      width: 6vw;
+    }
+    #openChatSelect {
+      position: fixed;
+      font-size: medium;
+      bottom: 1vh;
+      height: 6.5vh;
+      left: 0.5vw;
+      width: 19.5vw;
+      color: whitesmoke;
+      background-color: #18191a;
+      border: none;
+      outline: none;
+      transition: ease 0.3s;
+    }
+    #openChatSelect:hover {
+      font-size: large;
+    }
+
+    #messageReceivedClose {
+      font-size: large;
+      position: relative;
+      color: whitesmoke;
+      text-align: left;
+      margin-left: 1vw;
+      background-color: #3a3b3c;
+      border-radius: 8px;
+      width: fit-content;
+      margin-bottom: 0.25vh;
+    }
+
+    #messageReceivedSpace {
+      font-size: large;
+      position: relative;
+      color: whitesmoke;
+      text-align: left;
+      margin-left: 1vw;
+      background-color: #3a3b3c;
+      border-radius: 8px;
+      width: fit-content;
+      margin-bottom: 2vh;
+    }
+
+    #messageSentClose {
+      font-size: large;
+      position: relative;
+      color: whitesmoke;
+      width: fit-content;
+      margin-right: 1vw;
+      text-align: right;
+      margin-left: auto;
+      border-radius: 8px;
+      background-color: #3a3b3c;
+      margin-bottom: 0.25vh;
+    }
+    #messageSentSpace {
+      font-size: large;
+      position: relative;
+      color: whitesmoke;
+      width: fit-content;
+      margin-right: 1vw;
+      text-align: right;
+      margin-left: auto;
+      border-radius: 8px;
+      background-color: #3a3b3c;
+      margin-bottom: 2vh;
+    }
+    #chatIndicator {
+      position: relative;
+      scale: 1.5;
+      color: #e4e6eb;
+      font-weight: bold;
+      left: 75vw;
+      margin-bottom: 1vh;
+      width: fit-content;
+      font-family: "Bungee Shade", cursive;
+      top: 10vh;
+      transition: ease 0.3s;
+    }
+    #chatIndicator:hover {
+      scale: 1.7;
+    }
+    #h1 {
+      position: fixed;
+      left: 5vw;
+      right: 85vw;
+      top: -5vh;
+      font-family: "Bungee Shade", cursive;
+      scale: 1.3;
+      color: #e4e6eb;
+      transition: ease-out 0.3s;
+    }
+    #h1:hover {
+      letter-spacing: 0.3vw;
+    }
+
+    #lineDivBottom {
+      position: relative;
+      border-bottom: 5px solid #b0b3b8;
+      width: 95vw;
+      bottom: 2.5vh;
+    }
+    #lineDivTop {
+      position: relative;
+      border-bottom: 5px solid #b0b3b8;
+      width: 95vw;
+      bottom: 9vh;
+    }
+    #chatroomSelectClose {
+      position: fixed;
+      right: 5vw;
+      top: 2.5vh;
+      background-color: #b0b3b8;
+      color: black;
+    }
+    #addChatroom {
+      position: fixed;
+      right: 5vw;
+      bottom: 2vh;
+      width: 90vw;
+      background-color: #b0b3b8;
+      color: black;
+    }
+    #chatroomContainer {
+      position: relative;
+      left: 3vw;
+      top: 6vh;
+      bottom: 1vh;
+      height: 75vh;
+      width: 85vw;
+      overflow: scroll;
+      display: grid;
+      row-gap: 2vw;
+      column-gap: 2vh;
+      grid-template-columns: repeat(4, auto);
+      align-items: center;
+      justify-items: center;
+    }
   }
 </style>
