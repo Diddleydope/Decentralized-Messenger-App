@@ -70,7 +70,7 @@
     width: 8vw;
   }
 
-  @media all and (max-width: 900px) {
+  @media all and (max-width: 700px) {
     #alias {
       position: relative;
       top: 15vh;

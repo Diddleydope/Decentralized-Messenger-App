@@ -88,7 +88,7 @@
     color: whitesmoke;
   }
 
-  @media all and (max-width: 900px) {
+  @media all and (max-width: 700px) {
     #login-indicator {
       scale: 1.5;
       position: fixed;

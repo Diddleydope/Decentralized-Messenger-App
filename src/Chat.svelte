@@ -489,7 +489,7 @@
   /*------------------------------------------*/
   /*------------------------------------------*/
   /*------------------------------------------*/
-  @media all and (max-width: 900px) {
+  @media all and (max-width: 700px) {
     .chatroomMenu {
       width: 90vw;
       height: 90vh;
@@ -505,7 +505,7 @@
       top: 0;
       left: 0.5vw;
       margin: 0;
-      height: 15vh;
+      height: 12vh;
       width: 25vw;
       font-size: 15px;
       color: whitesmoke;
@@ -513,12 +513,7 @@
       border: none;
       border-radius: 3px;
       outline: none;
-      box-shadow: inset 0 0 0 0 #b0b3b8;
-      transition: ease-out 0.2s;
       display: block;
-    }
-    .chatSelect:hover {
-      box-shadow: inset 20vw 0 0 0 #b0b3b8;
     }
     /*
   .chatSelect:focus {
@@ -677,8 +672,8 @@
       width: 90vw;
       overflow: scroll;
       display: grid;
-      row-gap: 2vw;
-      column-gap: 2vh;
+      row-gap: 1vw;
+      column-gap: 1vh;
       grid-template-columns: repeat(3, auto);
       align-items: center;
       justify-items: center;
