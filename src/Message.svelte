@@ -21,19 +21,21 @@
   #message-sender {
     position: absolute;
     color: darkgray;
-    left: 0.3vw;
+    left: 0.75vw;
     font-style: italic;
-    font-size: 2.75vh;
   }
   #message-content {
     position: relative;
     margin-right: 1vw;
     right: 0.7vw;
     bottom: 0.5vh;
+    left: 0.75vw;
   }
   #time {
     position: relative;
     font-size: small;
     left: 0.5vw;
+    margin-right: 0.75vw;
+    scale: 0.8;
   }
 </style>

@@ -72,6 +72,7 @@
   function createNewChat() {
     gun.get("chat").get("chatrooms").set(temp);
     closeNewChat();
+    temp = "";
   }
 
   function resetMessages() {
@@ -484,8 +485,11 @@
     align-items: center;
     justify-items: center;
   }
-
-  @media all and (max-width: 500px) {
+  /*------------------------------------------*/
+  /*------------------------------------------*/
+  /*------------------------------------------*/
+  /*------------------------------------------*/
+  @media all and (max-width: 900px) {
     .chatroomMenu {
       width: 90vw;
       height: 90vh;
@@ -502,8 +506,8 @@
       left: 0.5vw;
       margin: 0;
       height: 15vh;
-      width: 19.5vw;
-      font-size: 25px;
+      width: 25vw;
+      font-size: 15px;
       color: whitesmoke;
       background-color: #3a3b3c;
       border: none;
@@ -523,32 +527,32 @@
 
     #chatbox {
       position: fixed;
-      top: 13.5vh;
+      top: 11vh;
       width: 96vw;
       height: auto;
       overflow-y: scroll;
       background-color: transparent;
-      height: 76vh;
+      height: 83.5vh;
     }
     .typeBox {
       position: absolute;
-      bottom: 1vh;
-      left: 20.5vw;
-      width: 73vw;
+      left: 2vw;
+      width: 80vw;
+      bottom: 0vh;
     }
     .sendButton {
       position: absolute;
-      bottom: 1vh;
-      left: 93.75vw;
-      width: 6vw;
+      bottom: 0vh;
+      left: 83vw;
+      width: 15vw;
     }
     #openChatSelect {
-      position: fixed;
+      position: absolute;
       font-size: medium;
-      bottom: 1vh;
-      height: 6.5vh;
-      left: 0.5vw;
-      width: 19.5vw;
+      top: 6vh;
+      height: 4vh;
+      left: 3vw;
+      width: 95vw;
       color: whitesmoke;
       background-color: #18191a;
       border: none;
@@ -609,14 +613,14 @@
     }
     #chatIndicator {
       position: relative;
-      scale: 1.5;
+      scale: 1.1;
       color: #e4e6eb;
       font-weight: bold;
-      left: 75vw;
+      left: 52vw;
       margin-bottom: 1vh;
       width: fit-content;
       font-family: "Bungee Shade", cursive;
-      top: 10vh;
+      top: 11.3vh;
       transition: ease 0.3s;
     }
     #chatIndicator:hover {
@@ -624,11 +628,11 @@
     }
     #h1 {
       position: fixed;
-      left: 5vw;
+      left: 3vw;
       right: 85vw;
       top: -5vh;
       font-family: "Bungee Shade", cursive;
-      scale: 1.3;
+      scale: 0.9;
       color: #e4e6eb;
       transition: ease-out 0.3s;
     }
@@ -640,7 +644,8 @@
       position: relative;
       border-bottom: 5px solid #b0b3b8;
       width: 95vw;
-      bottom: 2.5vh;
+      bottom: 4.8vh;
+      right: 16vw;
     }
     #lineDivTop {
       position: relative;
@@ -665,16 +670,16 @@
     }
     #chatroomContainer {
       position: relative;
-      left: 3vw;
+      left: 0vw;
       top: 6vh;
       bottom: 1vh;
       height: 75vh;
-      width: 85vw;
+      width: 90vw;
       overflow: scroll;
       display: grid;
       row-gap: 2vw;
       column-gap: 2vh;
-      grid-template-columns: repeat(4, auto);
+      grid-template-columns: repeat(3, auto);
       align-items: center;
       justify-items: center;
     }
