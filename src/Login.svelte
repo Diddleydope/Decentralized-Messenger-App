@@ -4,12 +4,7 @@
   let username, password;
 
   function login() {
-    user.auth(
-      username,
-      password,
-      console.log("username or password incorrect")
-    );
-    $username = username;
+    user.auth(username, password);
   }
   function signup() {
     user.create(username, password);

@@ -29,7 +29,7 @@
     margin-right: 1vw;
     right: 0.7vw;
     bottom: 0.5vh;
-    left: 0.75vw;
+    left: -0.1vw;
   }
   #time {
     position: relative;
