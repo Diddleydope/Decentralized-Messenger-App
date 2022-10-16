@@ -86,6 +86,7 @@
   }
 
   function buildChatrooms() {
+    console.log("Hey");
     gun
       .get("chat")
       .get("chatrooms")
@@ -105,7 +106,6 @@
               (a, b) => a.when - b.when
             );
           }
-          console.log(chatrooms);
 
           if (ids.indexOf(id) != -1) {
             return;
@@ -149,6 +149,7 @@
           if (message.what) {
             messages = [...messages, message].sort((a, b) => a.when - b.when);
             for (let i = 0; i < messages.length; i++) {
+              console.log($username);
               if (messages[i].who == $username) {
                 messages[i].displayType = 0;
               } else {
@@ -651,7 +652,7 @@
     #chatroomSelectClose {
       position: fixed;
       right: 5vw;
-      top: 2.5vh;
+      top: 4vh;
       background-color: #b0b3b8;
       color: black;
     }
