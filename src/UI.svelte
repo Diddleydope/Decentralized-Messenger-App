@@ -87,4 +87,48 @@
     left: 65vw;
     color: whitesmoke;
   }
+
+  @media all and (max-width: 900px) {
+    #login-indicator {
+      scale: 1.5;
+      position: fixed;
+      top: 33vh;
+      left: 44vw;
+      font-family: "Bungee Shade", cursive;
+      color: whitesmoke;
+    }
+    #welcome {
+      position: fixed;
+      font-family: "Bungee Shade", cursive;
+      scale: 4;
+      top: 10vh;
+      left: 38.5vw;
+      color: whitesmoke;
+    }
+    #to {
+      position: fixed;
+      font-family: "Bungee Shade", cursive;
+      scale: 5;
+      left: 46vw;
+      top: 22vh;
+      color: whitesmoke;
+    }
+    #decentralized {
+      position: fixed;
+      font-family: "Codystar", cursive, bold;
+      scale: 2.8;
+      left: 34vw;
+      top: 60vh;
+      color: #b0b3b8;
+      transition: ease 0.3s;
+    }
+    #messaging {
+      position: fixed;
+      font-family: "Bungee Shade", cursive;
+      scale: 3;
+      top: 70vh;
+      left: 35.5vw;
+      color: whitesmoke;
+    }
+  }
 </style>

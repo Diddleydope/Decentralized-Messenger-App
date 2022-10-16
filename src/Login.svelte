@@ -69,4 +69,43 @@
     background-color: #b0b3b8;
     width: 8vw;
   }
+
+  @media all and (max-width: 900px) {
+    #alias {
+      position: relative;
+      top: 15vh;
+      scale: 1.5;
+      left: 8.5vw;
+      background-color: whitesmoke;
+      width: 80vw;
+      height: 4vh;
+    }
+    #pass {
+      position: relative;
+      top: 15vh;
+      scale: 1.5;
+      left: 8.5vw;
+      background-color: whitesmoke;
+      width: 80vw;
+      height: 4vh;
+    }
+    #in {
+      position: relative;
+      top: 15vh;
+      scale: 1.5;
+
+      background-color: #b0b3b8;
+      width: 39.5vw;
+      height: 4vh;
+    }
+    #up {
+      position: relative;
+      top: 15vh;
+      scale: 1.5;
+      background-color: #b0b3b8;
+      width: 39.5vw;
+      height: 4vh;
+      left: 18.5vw;
+    }
+  }
 </style>
