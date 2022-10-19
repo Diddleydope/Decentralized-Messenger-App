@@ -7,9 +7,11 @@
 // sicherstellen das die Daten gesichert sind, solange genügend Relays im
 // Netzwerk vorhanden sind.
 const GUN = require("gun");                     //npm i gun
-//const { createServer } = require("http");
+const { createServer } = require("http");
 
-const gun = Gun(['http://localhost:8765/gun', 'https://gun-manhattan.herokuapp.com/gun']);
+const gun = GUN({
+    web: createServer().listen(8765),
+});
 gun.get("chat").map().once((data, id) => {
     console.log(data)
 })
