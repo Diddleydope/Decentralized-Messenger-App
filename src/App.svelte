@@ -1,6 +1,13 @@
 <script>
   import Chat from "./Chat.svelte";
   import UI from "./UI.svelte";
+
+  function checkUserAuth(req, res, next) {
+    if (req.session.user) return next();
+    return next(new NotAuthorizedError());
+  }
+
+  app.get("/app/:id", checkUserAuth, findApp, renderView, sendJSON);
 </script>
 
 <main>
