@@ -9,7 +9,7 @@
 const GUN = require("gun");                     //npm i gun
 //const { createServer } = require("http");
 
-const gun = GUN(['http://localhost:8765/gun', 'https://gun-manhattan.herokuapp.com/gun']);
+const gun = Gun(['http://localhost:8765/gun', 'https://gun-manhattan.herokuapp.com/gun']);
 gun.get("chat").map().once((data, id) => {
     console.log(data)
 })
