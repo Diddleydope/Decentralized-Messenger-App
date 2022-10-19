@@ -6,7 +6,9 @@
 // Clients noch Daten bestehen, werden diese wieder synchronisiert. So kann man
 // sicherstellen das die Daten gesichert sind, solange genügend Relays im
 // Netzwerk vorhanden sind.
-const GUN = require("gun");                     //npm i gun
+
+
+/*const GUN = require("gun");                     //npm i gun
 const { createServer } = require("http");
 
 const gun = GUN({
@@ -14,4 +16,4 @@ const gun = GUN({
 });
 gun.get("chat").map().once((data, id) => {
     console.log(data)
-})
+})*/
