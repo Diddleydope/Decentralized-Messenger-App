@@ -16,7 +16,9 @@ import { writable } from "svelte/store";
 // Kommunikation unter den Peers zusammen. Das sollte eigentlich nicht so sein,
 // das kommt vlt in einer neueren Version wieder. Ansonsten einfach genügend
 // Relays zur Verfügung stellen.
-export const gun = Gun(['http://localhost:8765/gun', 'https://gun-manhattan.herokuapp.com/gun']);
+export const gun = GUN({
+    peers: ["http://localhost:8765/gun"]
+});
 
 // Gun User
 export const user = gun.user().recall({sessionStorage: true}); //.recall({sessionStorage: true})
