@@ -17,7 +17,7 @@ import { writable } from "svelte/store";
 // das kommt vlt in einer neueren Version wieder. Ansonsten einfach genügend
 // Relays zur Verfügung stellen.
 export const gun = GUN({
-    peers: ["http://localhost:8765/gun"]
+    peers: ["http://172.105.92.43:8765/gun"]
 });
 
 // Gun User
